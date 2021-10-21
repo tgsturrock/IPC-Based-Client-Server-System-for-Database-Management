@@ -195,11 +195,14 @@ void fichier_resultat(t_resultat resultat){
 
 	//Imprime dans le fichier les champs de cote
 	for(int i = 0; i < (resultat->nb_titre); ++i){
-	fprintf(fichier_cote,"%s\t%s\t%d\n",
+	if(resultat->titre[i]->nombre_votes > 0){
+
+		fprintf(fichier_cote,"%s\t%s\t%d\n",
 			resultat->titre[i]->ID,
 			resultat->titre[i]->note_moyenne,
 			resultat->titre[i]->nombre_votes
 			);
+		}
 	}
 	fclose(fichier_cote);
 	//HLR 17 finie
@@ -235,15 +238,18 @@ int copy_strings(t_titre titre){
 		return 0;
 	}
 	strcpy(i,get_ID_t(titre));// on copy l'ID du film trouve
+
 	set_ID_t(titre,i);// on ajoute l'ID du film trouve
 
 	//On alloue une nouvelle addresse pour stocker le champ titre
+
 	char* t = (char*)calloc(strlen(get_titre_t(titre)),sizeof(char));
 	if ( t == NULL){
 		printf("Erreur d'allocation");
 		return 0;
 	}
 	strcpy(t,get_titre_t(titre)); // on copy le titre du film trouve
+
 	set_titre_t(titre,t);// on ajoute le titre du film trouve
 
 	//On alloue une nouvelle addresse pour stocker le champ genre
@@ -254,16 +260,19 @@ int copy_strings(t_titre titre){
 		return 0;
 	}
 	strcpy(g,get_genre_t(titre)); // on copy le genre du film trouve
+
 	set_genre_t(titre,g);// on ajoute le genre du film trouve
 
 
 	//On alloue une nouvelle addresse pour stocker le champ categorie
+
 	char* c = (char*)calloc(strlen(get_categorie_t(titre)),sizeof(char));
 	if ( c == NULL){
 		printf("Erreur d'allocation");
 		return 0;
 	}
 	strcpy(c,get_categorie_t(titre));// on copy la categorie du film trouve
+
 	set_categorie_t(titre,c);// on ajoute la categorie du film trouve
 
 	return 1;

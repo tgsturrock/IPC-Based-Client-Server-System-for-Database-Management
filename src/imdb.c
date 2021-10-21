@@ -59,26 +59,11 @@ void decompose(char* ligne, t_titre titre){
 
 int compare (t_critere critere, t_titre titre, t_resultat resultat){
 
-	 char* titre_c = get_titre(critere);//stockage du titre recherche
-	 char* genre_c = get_genre(critere);//stockage du genre recherche
-	 char* categorie_c=get_categorie(critere);//stockage de la categorie recherche
-	 int anne_parution_min_c = get_annee_parution_min(critere);//stockage de l'annee minimale recherche
-	 int anne_parution_max_c = get_annee_parution_max(critere);//stockage de l'annee maximale recherche
-
-	 //stock linformation du titre a comparer dans des string
-	 char* titre_t = get_titre_t(titre); //stockage du titre de la base
-	 char* genre_t = get_genre_t(titre); //stockage du genre de la base
-	 char* categorie_t = get_categorie_t(titre); //stockage de la categorie de la base
-	 int anne_parution_min_t = get_annee_parution_min_t(titre); //stockage de l'annee de parution de la base
-
 	 //variable pour verifier l'occurance d'un mot dans un string
 	 char* oc = NULL;
 	 char* oc2 = NULL;
 
 	 //char* spc = " ";
-
-
-
 
 	 if(get_titre(critere) != NULL){
 		 //strcat(titre_c," ");
@@ -94,48 +79,10 @@ int compare (t_critere critere, t_titre titre, t_resultat resultat){
 
 	if ((get_genre(critere)==NULL) || oc2 != NULL){ //si pas de genre ou genre correspondant, on avance
 
-			if ((get_categorie(critere)==NULL) || strcmp(get_categorie(critere),categorie_t)==0){//si pas de categorie ou categorie correspondant, on avance
+			if ((get_categorie(critere)==NULL) || strcmp(get_categorie(critere),get_categorie_t(titre))==0){//si pas de categorie ou categorie correspondant, on avance
 
 					if ((get_annee_parution_min(critere)==-1) || (get_annee_parution_min(critere)<=get_annee_parution_min_t(titre) && get_annee_parution_min_t(titre)<=get_annee_parution_max(critere))){//si pas d'annee ou annee correspondant, on avance
-/*
-						//On alloue une nouvelle addresse pour stocker le champ titre
-						char* ID = get_ID_t(titre);
-						char* i = (char*)malloc(strlen(ID)*sizeof(char));
-						if ( i == NULL){
-							printf("Erreur d'allocation");
-							return 0;
-						}
-						strcpy(i,ID);// on copy l'ID du film trouve
-						set_ID_t(titre,i);// on ajoute l'ID du film trouve
 
-						//On alloue une nouvelle addresse pour stocker le champ titre
-						char* t = (char*)malloc(strlen(titre_t)*sizeof(char));
-						if ( t == NULL){
-							printf("Erreur d'allocation");
-							return 0;
-						}
-						strcpy(t,titre_t); // on copy le titre du film trouve
-						set_titre_t(titre,t);// on ajoute le titre du film trouve
-
-						//On alloue une nouvelle addresse pour stocker le champ genre
-						char* g = (char*)malloc(strlen(genre_t)*sizeof(char));
-						if ( g == NULL){
-							printf("Erreur d'allocation");
-							return 0;
-						}
-						strcpy(g,genre_t); // on copy le genre du film trouve
-						set_genre_t(titre,g);// on ajoute le genre du film trouve
-
-
-						//On alloue une nouvelle addresse pour stocker le champ categorie
-						char* c = (char*)malloc(strlen(categorie_t)*sizeof(char));
-						if ( c == NULL){
-							printf("Erreur d'allocation");
-							return 0;
-						}
-						strcpy(c,categorie_t);// on copy la categorie du film trouve
-						set_categorie_t(titre,c);// on ajoute la categorie du film trouve
-*/
 						copy_strings(titre);
 						add_titre(resultat, titre);//tout match, on ajoute le titre au resultat
 						return 1;

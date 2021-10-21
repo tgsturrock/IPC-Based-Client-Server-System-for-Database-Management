@@ -229,45 +229,41 @@ void set_note_et_nombre_t(t_titre titre, char* note_moyenne, int nombre_votes) {
 
 int copy_strings(t_titre titre){
 
-	char* ID = get_ID_t(titre);
-	char* i = (char*)calloc(strlen(ID),sizeof(char));
+	char* i = (char*)calloc(strlen(get_ID_t(titre)),sizeof(char));
 	if ( i == NULL){
 		printf("Erreur d'allocation");
 		return 0;
 	}
-	strcpy(i,ID);// on copy l'ID du film trouve
+	strcpy(i,get_ID_t(titre));// on copy l'ID du film trouve
 	set_ID_t(titre,i);// on ajoute l'ID du film trouve
 
 	//On alloue une nouvelle addresse pour stocker le champ titre
-	char* titre_t = get_titre_t(titre);
-	char* t = (char*)calloc(strlen(titre_t),sizeof(char));
+	char* t = (char*)calloc(strlen(get_titre_t(titre)),sizeof(char));
 	if ( t == NULL){
 		printf("Erreur d'allocation");
 		return 0;
 	}
-	strcpy(t,titre_t); // on copy le titre du film trouve
+	strcpy(t,get_titre_t(titre)); // on copy le titre du film trouve
 	set_titre_t(titre,t);// on ajoute le titre du film trouve
 
 	//On alloue une nouvelle addresse pour stocker le champ genre
 
-	char* genre_t = get_genre_t(titre);
-	char* g = (char*)calloc(strlen(genre_t),sizeof(char));
+	char* g = (char*)calloc(strlen(get_genre_t(titre)),sizeof(char));
 	if ( g == NULL){
 		printf("Erreur d'allocation");
 		return 0;
 	}
-	strcpy(g,genre_t); // on copy le genre du film trouve
+	strcpy(g,get_genre_t(titre)); // on copy le genre du film trouve
 	set_genre_t(titre,g);// on ajoute le genre du film trouve
 
 
 	//On alloue une nouvelle addresse pour stocker le champ categorie
-	char* categorie_t = get_categorie_t(titre);
-	char* c = (char*)calloc(strlen(categorie_t),sizeof(char));
+	char* c = (char*)calloc(strlen(get_categorie_t(titre)),sizeof(char));
 	if ( c == NULL){
 		printf("Erreur d'allocation");
 		return 0;
 	}
-	strcpy(c,categorie_t);// on copy la categorie du film trouve
+	strcpy(c,get_categorie_t(titre));// on copy la categorie du film trouve
 	set_categorie_t(titre,c);// on ajoute la categorie du film trouve
 
 	return 1;

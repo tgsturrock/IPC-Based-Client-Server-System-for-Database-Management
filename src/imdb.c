@@ -80,23 +80,23 @@ int compare (t_critere critere, t_titre titre, t_resultat resultat){
 
 
 
-	 if(titre_c != NULL){
+	 if(get_titre(critere) != NULL){
 		 //strcat(titre_c," ");
-		 oc = strstr(titre_t , titre_c); //recherche du mot dans le titre du film de la base
+		 oc = strstr(get_titre_t(titre) , get_titre(critere)); //recherche du mot dans le titre du film de la base
 		 }
 
-		 if(genre_c != NULL){
-	     strcat(genre_c," ");
-		 oc2 = strstr(genre_t,genre_c); //recherche du mot dans le genre de la base
+		 if(get_genre(critere) != NULL){
+	     strcat(get_genre(critere)," ");
+		 oc2 = strstr(get_genre_t(titre),get_genre(critere)); //recherche du mot dans le genre de la base
 		 }
 
-	if ((titre_c != NULL) && oc != NULL){// il faut un titre et que le critere corresponde pour avancer
+	if ((get_titre(critere) != NULL) && oc != NULL){// il faut un titre et que le critere corresponde pour avancer
 
-	if ((genre_c==NULL) || oc2 != NULL){ //si pas de genre ou genre correspondant, on avance
+	if ((get_genre(critere)==NULL) || oc2 != NULL){ //si pas de genre ou genre correspondant, on avance
 
-			if ((categorie_c==NULL) || strcmp(categorie_c,categorie_t)==0){//si pas de categorie ou categorie correspondant, on avance
+			if ((get_categorie(critere)==NULL) || strcmp(get_categorie(critere),categorie_t)==0){//si pas de categorie ou categorie correspondant, on avance
 
-					if ((anne_parution_min_c==-1) || (anne_parution_min_c<=anne_parution_min_t && anne_parution_min_t<=anne_parution_max_c)){//si pas d'annee ou annee correspondant, on avance
+					if ((get_annee_parution_min(critere)==-1) || (get_annee_parution_min(critere)<=get_annee_parution_min_t(titre) && get_annee_parution_min_t(titre)<=get_annee_parution_max(critere))){//si pas d'annee ou annee correspondant, on avance
 /*
 						//On alloue une nouvelle addresse pour stocker le champ titre
 						char* ID = get_ID_t(titre);

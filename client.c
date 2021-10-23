@@ -13,14 +13,12 @@
  */
 
 #include "recherche.h"
-#include "imdb.h"
-#include "resultat.h"
 #include <unistd.h>
 #include <stdio.h>
 //#include <string.h>
 
 int main(int argc, char *argv[]) {
-    char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL;
+    char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL, *note = NULL;
 
     //Lab3-HLR02
     /*
@@ -28,8 +26,8 @@ int main(int argc, char *argv[]) {
      * afin d'associer des valeurs au chanps qui sont associees a ces arguments.
      */
     int opt;//variable servant a passer d'un argument a l'autre.
-
-       while((opt = getopt(argc, argv, ":tcag")) != -1)
+    int flag = 0;
+       while((opt = getopt(argc, argv, ":tcagv")) != -1)
        {
            switch(opt)
            {
@@ -49,6 +47,15 @@ int main(int argc, char *argv[]) {
 			   	   genre = argv[optind];
 			   	   optind++;
                    break;
+               //Lab3-HLR03
+               /*
+                * Argument -v qui permet a l'uti;isateur
+                * de demander a evaluer un titre
+                */
+               case 'v':
+            	    flag = 1;
+                    break;
+               //HLR03 finie
                case ':':
 			   	   printf ("Veuillez entree une valeur pour l'option desire\n");
                    break;
@@ -65,9 +72,12 @@ int main(int argc, char *argv[]) {
        //On s<assure qu'au moins un titre est passe en parametre
        if(titre == NULL){
     	   printf ("Veuillez saisir un titre\n");
+    	   return 0;
        }
        //HLR02 finie
-
+       if(note == NULL){
+    	   printf ("Veuillez saisir un titre\n");
+       }
 
     // Création de la structure critere et stockage des arguments reçus
     t_critere critere = creer_critere();
@@ -79,35 +89,7 @@ int main(int argc, char *argv[]) {
         set_genre(critere, genre);
     if (annees)
         set_intervalle_annees(critere, annees);
-//Lab2-HLR24
-    /*
-     * Le programme principale explore les deux fichiers de base de donnees en utilisant les fonctions du module imdb
-     */
 
-    //recherche dans la base de donnee pour des titre qui concorde avec les criteres de recherche
-    t_resultat resultat = lecture(critere);
-
-    //Ajout des cotes de moyenne et nombre de vote aux resultats
-    lecture_cote(resultat);
-//HLR24 finie
-
-//Lab2-HLR25
-    /*
-     * Le programme principal donne les resultats de recherche l'utilisateur en utilisant les fonctions du modure resultat.
-     */
-    //Impression des resultat en 2 fichier tsv
-    fichier_resultat(resultat);
-//HLR25 finie
-
-//Lab2-HLR26
-/*
- * Toute la memoire alloue est desallouee avant de quitter le progamme.
- */
- for (int j =0 ;j<get_nb_titre(resultat);j++){
-	 detruire_titre((get_titre_r(resultat,j)));
- }
-    //libere la memoire
- 	detruire_resultat(resultat);
     detruire_critere(critere);
 
     return 0;

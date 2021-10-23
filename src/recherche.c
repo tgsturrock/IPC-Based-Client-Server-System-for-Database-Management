@@ -14,6 +14,12 @@ struct critere {
     char *titre;
     char *categorie;
     char *genre;
+    //Lab3-HLR04
+    /*
+     * Noveau membre qui permet de savoir si l<utilisateur a fait la demande
+     * d'evaluation de titre
+     */
+    int evaluation;
     int annee_parution_min;
     int annee_parution_max;
 };
@@ -28,6 +34,9 @@ t_critere creer_critere(void) {
         critere->titre = NULL;
         critere->categorie = NULL;
         critere->genre = NULL;
+      //HLR04 continuite
+        critere->evaluation = -1;
+      //HLR04 finie
         critere->annee_parution_min = -1;
         critere->annee_parution_max = -1;
     }

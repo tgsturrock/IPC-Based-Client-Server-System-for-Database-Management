@@ -15,60 +15,59 @@
 #include "recherche.h"
 #include "imdb.h"
 #include "resultat.h"
+#include <unistd.h>
+#include <stdio.h>
 //#include <string.h>
 
 int main(int argc, char *argv[]) {
     char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL;
 
-    // Lab2-HLR01 - Arguments provenant du terminal
-    // Si aucun argument n'est donné, le programme s'arrête
-    if (argc < 2) {
-        printf ("Erreur, pas d'arguments");
-        free (argv);
-        return 0;
-    }
-    //HLR01 finie
+    //Lab3-HLR02
+    /*
+     * On se sert de getopt afin de passer au travers du tableau argv pour retrouver les arguments passer en parametere
+     * afin d'associer des valeurs au chanps qui sont associees a ces arguments.
+     */
+    int opt;//variable servant a passer d'un argument a l'autre.
 
+       while((opt = getopt(argc, argv, ":tcag")) != -1)
+       {
+           switch(opt)
+           {
+               case 't':
+			   	   titre = argv[optind];
+			   	   optind++;
+			   	   break;
+               case 'c':
+			   	   categorie = argv[optind];
+			   	   optind++;
+			   	   break;
+               case 'a':
+			   	   annees = argv[optind];
+			   	   optind++;
+                   break;
+               case 'g':
+			   	   genre = argv[optind];
+			   	   optind++;
+                   break;
+               case ':':
+			   	   printf ("Veuillez entree une valeur pour l'option desire\n");
+                   break;
+               case '?':
+                   printf ("unknown option: %c\n", optopt);
+                   break;
+           }
+       }
+       // optind is for the extra arguments
+       // which are not parsed
+       for( ;optind < argc; optind++){
+           printf("extra arguments: %s\n", argv[optind]);
+       }
+       //On s<assure qu'au moins un titre est passe en parametre
+       if(titre == NULL){
+    	   printf ("Veuillez saisir un titre\n");
+       }
+       //HLR02 finie
 
-    // Lab2-HLR02 - Arguments possibles
-    for (int i = 1; i < argc ; i++) {
-        // Option de titre
-        if (strcmp(argv[i], "-t") == 0) {
-            // On passe a l'argument qui vient après l'option
-            i++;// On implemente le titre
-            titre = argv[i];
-            i++;
-        }
-        // Lab2-HLR03 - Argument obligatoire
-        else{
-        	printf("Vous devez specifier un titre\n");
-        	return 0;
-        }
-        //HLR03 finie
-        if (argv[i] != NULL){
-        		if(strcmp(argv[i], "-c") == 0) {
-        			i++; // On implemente la categorie
-        			categorie = argv[i];
-        			i++;
-        		}
-        }
-        if (argv[i] != NULL){
-        	if (strcmp(argv[i], "-a") == 0) {
-        		i++; // On implemente les annees
-        		annees = argv[i];
-        		i++;
-        		}
-        }
-        if (argv[i] != NULL){
-        		if (strcmp(argv[i], "-g") == 0) {
-        		i++; // On implemente le genre
-        		genre = argv[i];
-        		i++;
-        		}
-        	}
-        }
-
-    //HLR02 finie
 
     // Création de la structure critere et stockage des arguments reçus
     t_critere critere = creer_critere();

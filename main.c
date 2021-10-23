@@ -15,7 +15,7 @@
 #include "resultat.h"
 //#include <string.h>
 
-int main(int argc, char *argv[]) {
+int main2(int argc, char *argv[]) {
     char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL;
 
     // Lab2-HLR01 - Arguments provenant du terminal

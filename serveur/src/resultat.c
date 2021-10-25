@@ -25,6 +25,14 @@ struct titre {
  */
 	char* note_moyenne;//average rating
 	int nombre_votes;//nombre de votes
+
+//Lab3-HLR03
+/* On ajoute un champ pour emmagasiner le numero de ligne */
+
+	int numero_ligne;
+
+
+
 };
 //HLR04 finie
 
@@ -153,19 +161,19 @@ void add_titre(t_resultat resultat, t_titre titre){
 
 void fichier_resultat(t_resultat resultat){
 
-	//cree le fichier a ecrire dedans puis on l'ouvre
+	/*cree le fichier a ecrire dedans puis on l'ouvre
 	FILE *fichier_resultat = fopen("resultat.tsv","w");
 
-	//Regarde si le fichier est cree
+	Regarde si le fichier est cree
 	if(fichier_resultat == NULL){
 	printf("Impossible de cree le fichier resultat");
 	return;
 	}
 
-	/*Pour chaque titre contenu dans la structure resultat on ecrit le contenue de la
-	 * structrure titre sur une ligne. Chaque champ de la structure titre
-	 * est separe par une tabulation.
-	 */
+	 Pour chaque titre contenu dans la structure resultat on ecrit le contenue de la
+	 structrure titre sur une ligne. Chaque champ de la structure titre
+	 est separe par une tabulation.
+
 
 	for(int i = 0; i < (resultat->nb_titre); i++){
 		fprintf(fichier_resultat,"%s\t%s\t%d\t%s\t%s\t\n",
@@ -177,12 +185,20 @@ void fichier_resultat(t_resultat resultat){
 	}
 	//On ferme le fichier une fois que les titre ont ete ajoutes
 	fclose(fichier_resultat);
+	*/
 
-	// HLR 17
-	/*
-	 * Creation d'un fichier tsv affiche les cotes associer au titres
-	 * fesant partie de la liste de resultats retenu
-	 */
+	//Lab3-HLR02  //On affiche dans le terminal les resultats de la recherche au lieu de les ecrire dans un fichier txt
+
+	for(int i = 0; i < (resultat->nb_titre); i++){
+		printf("%s\t%s\t%d\t%s\t%s\t\n",
+				 resultat->titre[i]->ID,
+				 resultat->titre[i]->titre,
+				 resultat->titre[i]->annee_parution_min,
+				 resultat->titre[i]->categorie,
+				 resultat->titre[i]->genre);
+	}
+
+	//Lab3-HLR02 finie
 
 	//Creation du fichier cote pour inscrire les cotes des titre
 	FILE *fichier_cote = fopen("cote.tsv","w");

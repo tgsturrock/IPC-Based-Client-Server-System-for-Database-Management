@@ -31,7 +31,7 @@ struct titre {
 
 	int numero_ligne;
 
-//Lab3-HLR03 finie
+//Lab3-HLR03  finie
 
 
 };

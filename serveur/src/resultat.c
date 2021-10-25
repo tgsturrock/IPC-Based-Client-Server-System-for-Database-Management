@@ -31,6 +31,7 @@ struct titre {
 
 	int numero_ligne;
 
+//Lab3-HLR03 finie
 
 
 };
@@ -184,7 +185,7 @@ void fichier_resultat(t_resultat resultat){
 				 resultat->titre[i]->genre);
 	}
 	//On ferme le fichier une fois que les titre ont ete ajoutes
-	fclose(fichier_resultat);
+	fclose(fichier_resultat);//Lab3-HLR03 finie
 	*/
 
 	//Lab3-HLR02  //On affiche dans le terminal les resultats de la recherche au lieu de les ecrire dans un fichier txt

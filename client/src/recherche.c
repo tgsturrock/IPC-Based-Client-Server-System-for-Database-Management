@@ -117,3 +117,11 @@ int get_annee_parution_min(t_critere critere) {
 int get_annee_parution_max(t_critere critere) {
     return critere->annee_parution_max;
 }
+
+//Labo3 HLR Client-06
+
+int get_evaluation (t_critere critere){
+	return critere->evaluation;
+}
+
+//Labo3 HLR Client-06 finie

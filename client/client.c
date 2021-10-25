@@ -82,6 +82,10 @@ int main(int argc, char *argv[]) {
     // Création de la structure critere et stockage des arguments reçus
     t_critere critere = creer_critere();
 
+    if(strpbrk(titre,"") == NULL){
+    	strcat(titre," ");
+    }
+
     set_titre(critere, titre);
     if (categorie)
         set_categorie(critere, categorie);

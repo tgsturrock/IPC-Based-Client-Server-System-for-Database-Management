@@ -89,6 +89,14 @@ void set_intervalle_annees(t_critere critere, char *annees) {
         critere->annee_parution_max = critere->annee_parution_min;
 }
 
+//Labo3 HLR Client-05
+
+void set_evaluation(t_critere critere, int evaluation){
+	critere->evaluation=evaluation;
+}
+
+//Labo3 HLR Client-05 finie
+
 // Observateurs
 char* get_titre(t_critere critere) {
     return critere->titre;

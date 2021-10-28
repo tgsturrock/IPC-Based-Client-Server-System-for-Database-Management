@@ -63,7 +63,6 @@ void detruire_titre(t_titre titre);
 
 void detruire_resultat(t_resultat resultat);
 
-int copy_strings(t_titre titre);
 
 /**
  * Observateur de ID

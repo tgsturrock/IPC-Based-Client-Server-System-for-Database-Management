@@ -122,44 +122,28 @@ void decompose_cote(char* ligne, t_titre titre){
  * Fonction privee qui compare l'identifiant unique de la cote  a ceux des titres retenus dans les resiultats.
  * Si la cote est celle d'un titre retenus. les donnees sont ajoutees a la structure titre qui lui corrrespondent.
  */
-int compare_cote (t_resultat resultat,t_titre titre){
+	int compare_cote (t_resultat resultat,t_titre titre){
 
-	int k = get_nb_titre(resultat);
-	for(int i =0 ;i<k;i++){
 
-		t_titre titre_res = get_titre_r(resultat,i);
-		char* ID_res = get_ID_t(titre_res); // on stock l'ID du resultat
-		char* ID_comp = get_ID_t(titre); // on stock l'ID du film de la base
+		for(int i =0 ;i<get_nb_titre(resultat);i++){
 
-		if (strcmp(ID_res,ID_comp)==0){ // si les deux ID correspondent on avance
+			t_titre titre_res = get_titre_r(resultat,i);
 
-			char* moy = get_moyenne(titre); //on recupere la moyenne du film de la base
-			int p =get_vote(titre); // on recupere le nombre de vottes du film de la base
+			if (strcmp(get_ID_t(titre_res),get_ID_t(titre))==0){ // si les deux ID correspondent on avance
 
-			if( strcmp(moy,"NULL")!=0 && p >0){ // si le film a une ;oyenne et qu'il y a des votants, on avance
+				char* nm = (char*)calloc(strlen(get_moyenne(titre)+1),sizeof(char));
+				if ( nm == NULL){
+					printf("Erreur d'allocation");
+					return 0;
+				}
 
-			char* nm = (char*)malloc(strlen(get_moyenne(titre))*sizeof(char));
-			if ( nm == NULL){
-				printf("Erreur d'allocation");
-				return 0;
+					int vt = get_vote(titre); //on copie le nombre de votes
+
+				set_note_et_nombre_t(titre_res, nm, vt);//on ajoute au resultat le nombre de votes et la moyenne
+				}
 			}
-
-			else{
-				strcpy(nm,get_moyenne(titre)); //on copie la moyenne
-			}
-			int vt = 0;
-			if(get_vote(titre)== -1){
-				vt = 0;
-			}
-			else{
-				vt = get_vote(titre); //on copie le nombre de votes
-			}
-			set_note_et_nombre_t(titre_res, nm, vt);//on ajoute au resultat le nombre de votes et la moyenne
-			}
-		}
+		return 1;
 	}
-	return 1;
-}
 
 //HLR21 finie
 
@@ -203,7 +187,8 @@ t_resultat lecture(t_critere critere){
 		compare(critere,titre,resultat);
 
 	}
-
+	free(ligne);
+	free(titre);
 //HLR 11 finie
 return resultat;
 }
@@ -241,6 +226,8 @@ while (fgets(ligne, taille_max, fichier) != NULL){
 		compare_cote(resultat,titre);
 	//HLR22 finir
 	}
+free(ligne);
+free(titre);
 }
 
 

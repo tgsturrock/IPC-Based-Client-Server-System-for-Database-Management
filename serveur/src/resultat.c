@@ -137,11 +137,13 @@ void add_titre(t_resultat resultat, t_titre titre){
 		t_titre* ptr;//Stocke temporairement l'adresse de l'espace re-alloue
 		ptr = (t_titre*)realloc(resultat->titre, j*sizeof(t_titre));
 
+
 		if (ptr == NULL){
 			printf("Erreur d'allocation lors de l'ajout d'un titre");
 		}
-
 		resultat->titre = ptr;
+
+
 		resultat->titre[i]= cree_titre();
 		resultat->titre[i] = copy;//rajoute un titre dans le tableau de resultat
 		resultat->nb_titre++;//incremente le nombre de titre
@@ -247,54 +249,6 @@ void set_note_et_nombre_t(t_titre titre, char* note_moyenne, int nombre_votes) {
 }
 //HLR16 finie
 
-int copy_strings(t_titre titre){
-
-	char* i = (char*)calloc(strlen(get_ID_t(titre)),sizeof(char));
-	if ( i == NULL){
-		printf("Erreur d'allocation");
-		return 0;
-	}
-	strcpy(i,get_ID_t(titre));// on copy l'ID du film trouve
-
-	set_ID_t(titre,i);// on ajoute l'ID du film trouve
-
-	//On alloue une nouvelle addresse pour stocker le champ titre
-
-	char* t = (char*)calloc(strlen(get_titre_t(titre)),sizeof(char));
-	if ( t == NULL){
-		printf("Erreur d'allocation");
-		return 0;
-	}
-	strcpy(t,get_titre_t(titre)); // on copy le titre du film trouve
-
-	set_titre_t(titre,t);// on ajoute le titre du film trouve
-
-	//On alloue une nouvelle addresse pour stocker le champ genre
-
-	char* g = (char*)calloc(strlen(get_genre_t(titre)),sizeof(char));
-	if ( g == NULL){
-		printf("Erreur d'allocation");
-		return 0;
-	}
-	strcpy(g,get_genre_t(titre)); // on copy le genre du film trouve
-
-	set_genre_t(titre,g);// on ajoute le genre du film trouve
-
-
-	//On alloue une nouvelle addresse pour stocker le champ categorie
-
-	char* c = (char*)calloc(strlen(get_categorie_t(titre)),sizeof(char));
-	if ( c == NULL){
-		printf("Erreur d'allocation");
-		return 0;
-	}
-	strcpy(c,get_categorie_t(titre));// on copy la categorie du film trouve
-
-	set_categorie_t(titre,c);// on ajoute la categorie du film trouve
-
-	return 1;
-}
-
 void set_ID_t(t_titre titre, char* ID) {
 	titre->ID = ID;
 }
@@ -319,14 +273,31 @@ void copy_titre(t_titre titre, t_titre copyTitre){
 	 // variable servant a copier le titre
 
 	//Copie les champs de titre recu
-	    copyTitre->ID = titre->ID;
-	    copyTitre->titre = titre->titre;
+	//On alloue une nouvelle addresse pour stocker le champ ID
+
+		if(titre->ID != NULL){
+			copyTitre->ID = (char*)calloc(strlen(titre->ID)+1,sizeof(char));
+			assert(copyTitre->ID!=NULL);
+			strcpy(copyTitre->ID,titre->ID);
+		}
+		if(titre->titre != NULL){
+			copyTitre->titre = (char*)calloc(strlen(titre->titre)+1,sizeof(char));
+			assert(copyTitre->titre!=NULL);
+			strcpy(copyTitre->titre,titre->titre);
+		}
 	    copyTitre->annee_parution_min = titre->annee_parution_min;
-	    copyTitre->categorie = titre->categorie;
-	    copyTitre->genre = titre->genre;
+		if(titre->categorie != NULL){
+			copyTitre->categorie = (char*)calloc(strlen(titre->categorie)+1,sizeof(char));
+			assert(copyTitre->categorie!=NULL);
+			strcpy(copyTitre->categorie,titre->categorie);
+		}
+		if(titre->genre != NULL){
+			copyTitre->genre = (char*)calloc(strlen(titre->genre)+1,sizeof(char));
+			assert(copyTitre->genre!=NULL);
+			strcpy(copyTitre->genre,titre->genre);
+		}
 
 }
-
 // Observateurs
 char* get_ID_t(t_titre titre) {
     return titre->ID;

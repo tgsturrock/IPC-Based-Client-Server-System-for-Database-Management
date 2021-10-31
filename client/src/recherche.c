@@ -14,9 +14,9 @@ struct critere {
     char *titre;
     char *categorie;
     char *genre;
-    //Lab3-HLR04
+    //Lab3 client-HLR04
     /*
-     * Noveau membre qui permet de savoir si l<utilisateur a fait la demande
+     * Noveau membre qui permet de savoir si l'utilisateur a fait la demande
      * d'evaluation de titre
      */
     int evaluation;
@@ -34,9 +34,9 @@ t_critere creer_critere(void) {
         critere->titre = NULL;
         critere->categorie = NULL;
         critere->genre = NULL;
-      //HLR04 continuite
+      //client-HLR04 continuite
         critere->evaluation = -1;
-      //HLR04 finie
+      //client-HLR04 finie
         critere->annee_parution_min = -1;
         critere->annee_parution_max = -1;
     }
@@ -89,13 +89,15 @@ void set_intervalle_annees(t_critere critere, char *annees) {
         critere->annee_parution_max = critere->annee_parution_min;
 }
 
-//Labo3 HLR Client-05
-
+//Lab3 client-HLR05
+/*
+ * Fonction publique qui permet d'ajouter la valeur associe a la demande d'evaluation d'un
+ * titre par le client.
+ */
 void set_evaluation(t_critere critere, int evaluation){
 	critere->evaluation=evaluation;
 }
-
-//Labo3 HLR Client-05 finie
+//client-HLR05 finie
 
 // Observateurs
 char* get_titre(t_critere critere) {
@@ -118,10 +120,12 @@ int get_annee_parution_max(t_critere critere) {
     return critere->annee_parution_max;
 }
 
-//Labo3 HLR Client-06
-
+//Lab3 client-HLR06
+/*
+ * Fonction publique qui permet d'observer la valeur associe a la demande d'evaluation d'un
+ * titre par le client.
+ */
 int get_evaluation (t_critere critere){
 	return critere->evaluation;
 }
-
-//Labo3 HLR Client-06 finie
+//client-HLR06 finie

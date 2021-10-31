@@ -5,13 +5,21 @@
  * Date : 23 Octobre 2021
  *
  * Ce programme est responsable de l'interaction avec l'usager.
- * Il demande a l'usager quelle operation operation qu'il ou elle souhater effectuer
+ * Il demande a l'usager quelle operation operation qu'il ou elle souhaite effectuer
  * pour ensuite interprete la requete au programme serveur, qui lui renvera les donnees desirer.
  * Le programme montrera alors les donnees a l'usager.
  *
  *
  */
-//test
+
+/*
+ * Lab3 client-HLR01
+ * Decouplage de la partie qui s'occupe d'interagir avec l'utilisateur
+ * dans le projet du laboratoire #2.
+ *
+ * client-HLR01 finie
+ */
+
 #include "recherche.h"
 #include <unistd.h>
 #include <stdio.h>
@@ -20,7 +28,7 @@
 int main(int argc, char *argv[]) {
     char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL, *note = NULL;
 
-    //Lab3-HLR02
+    //Lab3 client-HLR02
     /*
      * On se sert de getopt afin de passer au travers du tableau argv pour retrouver les arguments passer en parametere
      * afin d'associer des valeurs au chanps qui sont associees a ces arguments.
@@ -74,17 +82,12 @@ int main(int argc, char *argv[]) {
     	   printf ("Veuillez saisir un titre\n");
     	   return 0;
        }
-       //HLR02 finie
-       if(note == NULL){
-    	   printf ("Veuillez saisir un titre\n");
-       }
+       //client-HLR02 finie
+
 
     // Création de la structure critere et stockage des arguments reçus
     t_critere critere = creer_critere();
 
-    if(strpbrk(titre,"") == NULL){
-    	strcat(titre," ");
-    }
 
     set_titre(critere, titre);
     if (categorie)

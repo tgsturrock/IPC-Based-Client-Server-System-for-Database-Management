@@ -26,13 +26,9 @@ struct titre {
 	char* note_moyenne;//average rating
 	int nombre_votes;//nombre de votes
 
-//Lab3-HLR03
+//Lab3 serveur-HLR03
 /* On ajoute un champ pour emmagasiner le numero de ligne */
-
 	int numero_ligne;
-
-//Lab3-HLR03  finie
-
 
 };
 //HLR04 finie
@@ -74,10 +70,12 @@ t_titre cree_titre(void){
 	        titre->annee_parution_min = -1;
 	        titre->categorie = NULL;
 	        titre->genre = NULL;
-	        //HLR15
+	        //lab2-HLR15
 	        titre->note_moyenne = NULL;
 	        titre->nombre_votes=-1;
 	        //HLR15 finie
+	        titre->numero_ligne=-1;
+	        //serveur-HLR03 finie
 	    }
 	    return titre;
 }
@@ -190,8 +188,10 @@ void fichier_resultat(t_resultat resultat){
 	fclose(fichier_resultat);//Lab3-HLR03 finie
 	*/
 
-	//Lab3-HLR02  //On affiche dans le terminal les resultats de la recherche au lieu de les ecrire dans un fichier txt
-
+	//Lab3 serveur-HLR02
+	/*On affiche dans le terminal les resultats de la recherche
+	 * au lieu de les ecrire dans un fichier txt
+	 */
 	for(int i = 0; i < (resultat->nb_titre); i++){
 		printf("%s\t%s\t%d\t%s\t%s\t\n",
 				 resultat->titre[i]->ID,
@@ -201,7 +201,7 @@ void fichier_resultat(t_resultat resultat){
 				 resultat->titre[i]->genre);
 	}
 
-	//Lab3-HLR02 finie
+	//Lab3 client-HLR02 finie
 
 	//Creation du fichier cote pour inscrire les cotes des titre
 	FILE *fichier_cote = fopen("cote.tsv","w");

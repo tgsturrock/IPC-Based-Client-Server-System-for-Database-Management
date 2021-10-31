@@ -42,6 +42,8 @@ t_titre cree_titre(void);
 
 t_resultat cree_resultat(void);
 
+void calcul_moyenne(t_titre titre, char* nouvelle_cote);
+
 void set_numero_ligne(t_titre titre, int numero_ligne);
 
 void set_note_et_nombre_t(t_titre titre, char* note_moyenne, int nombre_votes);

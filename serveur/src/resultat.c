@@ -144,12 +144,12 @@ void add_titre(t_resultat resultat, t_titre titre){
 		resultat->titre = ptr;
 
 
-		resultat->titre[i]= cree_titre();
+		//resultat->titre[i]= cree_titre();
 		resultat->titre[i] = copy;//rajoute un titre dans le tableau de resultat
 		resultat->nb_titre++;//incremente le nombre de titre
 	}
 	else{
-	resultat->titre[i] = cree_titre();
+	//resultat->titre[i] = cree_titre();
 	resultat->titre[i] = copy;//rajoute un titre dans le tableau de resultat
 	resultat->nb_titre++;//incremente le nombre de titre
 	}
@@ -230,9 +230,15 @@ void fichier_resultat(t_resultat resultat){
 
 // Destructeur
 void detruire_titre(t_titre titre) {
-    free(titre);
+	free(titre->ID);
+	free(titre->categorie);
+	free(titre->genre);
+	free(titre->note_moyenne);
+	free(titre->titre);
+	free(titre);
 }
 void detruire_resultat(t_resultat resultat){
+	free(resultat->titre);
 	free(resultat);
 }
 

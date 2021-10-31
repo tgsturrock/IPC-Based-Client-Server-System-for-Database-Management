@@ -83,7 +83,7 @@ int compare (t_critere critere, t_titre titre, t_resultat resultat){
 
 					if ((get_annee_parution_min(critere)==-1) || (get_annee_parution_min(critere)<=get_annee_parution_min_t(titre) && get_annee_parution_min_t(titre)<=get_annee_parution_max(critere))){//si pas d'annee ou annee correspondant, on avance
 
-						copy_strings(titre);
+				
 						add_titre(resultat, titre);//tout match, on ajoute le titre au resultat
 						return 1;
 				}
@@ -187,6 +187,7 @@ t_resultat lecture(t_critere critere){
 		compare(critere,titre,resultat);
 
 	}
+	fclose(fichier);
 	free(ligne);
 	free(titre);
 //HLR 11 finie
@@ -226,6 +227,7 @@ while (fgets(ligne, taille_max, fichier) != NULL){
 		compare_cote(resultat,titre);
 	//HLR22 finir
 	}
+fclose(fichier);
 free(ligne);
 free(titre);
 }

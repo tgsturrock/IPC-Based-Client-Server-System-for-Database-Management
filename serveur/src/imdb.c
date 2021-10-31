@@ -63,10 +63,7 @@ int compare (t_critere critere, t_titre titre, t_resultat resultat){
 	 char* oc = NULL;
 	 char* oc2 = NULL;
 
-	 //char* spc = " ";
-
 	 if(get_titre(critere) != NULL){
-		 //strcat(titre_c," ");
 		 oc = strstr(get_titre_t(titre) , get_titre(critere)); //recherche du mot dans le titre du film de la base
 		 }
 

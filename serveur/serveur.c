@@ -13,7 +13,7 @@
 /*
  * Lab3 Serveur-HLR01
  * La portion du programme responsable de l'interatction avec la base de donnees
- * da ete decouple a partir de implementation du laboratoire #2
+ * da ete decouple a partir de implementation du laboratoire #2.
  *
  * Serveur-HLR01 finie
  */

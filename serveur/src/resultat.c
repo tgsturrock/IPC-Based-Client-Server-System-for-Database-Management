@@ -255,6 +255,11 @@ void set_note_et_nombre_t(t_titre titre, char* note_moyenne, int nombre_votes) {
 }
 //HLR16 finie
 
+//serveur-HLR04
+void set_numero_ligne(t_titre titre, int numero_ligne){
+	titre->numero_ligne = numero_ligne;
+}
+
 void set_ID_t(t_titre titre, char* ID) {
 	titre->ID = ID;
 }
@@ -339,4 +344,8 @@ t_titre get_titre_r(t_resultat resultat, int i){
 
 int get_nb_titre(t_resultat resultat){
 	return resultat->nb_titre;
+}
+//serveur-HLR04
+int get_numero_ligne(t_titre titre){
+	return titre->numero_ligne;
 }

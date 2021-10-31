@@ -42,6 +42,8 @@ t_titre cree_titre(void);
 
 t_resultat cree_resultat(void);
 
+void set_numero_ligne(t_titre titre, int numero_ligne);
+
 void set_note_et_nombre_t(t_titre titre, char* note_moyenne, int nombre_votes);
 
 void add_titre(t_resultat resultat, t_titre titre);
@@ -163,10 +165,25 @@ t_titre get_titre_r(t_resultat resultat, int i);
  *
  * resultat : la structure à observer
  *
- * Retour : chaine de caractères constituant le nombre de titres de la structure resultat retournee a l'utilisateur
+ * Retour : nombre entier constituant le nombre de titres de la structure resultat retournee a l'utilisateur
  */
 
 int get_nb_titre(t_resultat resultat);
+
+/**
+ * Observateur de numero de ligne
+ *
+ * Permet d'obtenir le numero de ligne a laquelle se trouve un titre
+ * dans le fichier title_ratings.tsv
+ *
+ * titre : la structure a observer
+ *
+ * retour: nombre entier constituant le numero de ligne a laquelle se trouve un titre
+ *
+ */
+
+int get_numero_ligne(t_titre titre);
+
 
 
 void fichier_resultat(t_resultat resultat);

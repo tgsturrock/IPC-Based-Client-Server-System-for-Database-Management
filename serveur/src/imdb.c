@@ -119,7 +119,7 @@ void decompose_cote(char* ligne, t_titre titre){
  * Fonction privee qui compare l'identifiant unique de la cote  a ceux des titres retenus dans les resiultats.
  * Si la cote est celle d'un titre retenus. les donnees sont ajoutees a la structure titre qui lui corrrespondent.
  */
-	int compare_cote (t_resultat resultat,t_titre titre){
+	int compare_cote (t_resultat resultat,t_titre titre, int j){
 
 
 		for(int i =0 ;i<get_nb_titre(resultat);i++){
@@ -128,15 +128,21 @@ void decompose_cote(char* ligne, t_titre titre){
 
 			if (strcmp(get_ID_t(titre_res),get_ID_t(titre))==0){ // si les deux ID correspondent on avance
 
-				char* nm = (char*)calloc(strlen(get_moyenne(titre)+1),sizeof(char));
+				char* nm = (char*)calloc(strlen(get_moyenne(titre))+1,sizeof(char));
 				if ( nm == NULL){
 					printf("Erreur d'allocation");
 					return 0;
 				}
+				strcpy(nm,get_moyenne(titre));//copy la moyenne
+				int vt = get_vote(titre); //on copie le nombre de votes
 
-					int vt = get_vote(titre); //on copie le nombre de votes
+				//on ajoute au resultat le nombre de votes et la moyenne
+				set_note_et_nombre_t(titre_res, nm, vt);
 
-				set_note_et_nombre_t(titre_res, nm, vt);//on ajoute au resultat le nombre de votes et la moyenne
+				//on ajoute le numero de ligne associer a la cote extraite
+				set_numero_ligne(titre_res,j);
+				//serveur-HLR04 finie
+
 				}
 			}
 		return 1;
@@ -216,13 +222,19 @@ FILE *fichier = fopen("data/title_ratings.tsv", "r");
 while (fgets(ligne, taille_max, fichier) != NULL){
 //HLR 19 finie
 
+	//Lab3 serveur-HLR04
+	int num_ligne = 1;//variable permettant de garder en compte le numero de ligne
+
 	//Lab2-HLR22
-	/*
-	 * Chaque ligne de cote lue est decomposee et comparer avec les resultat des titres puis l'information sur la cote de classement est ajouter aux titre correspondant.
-	 */
+	 /*Chaque ligne de cote lue est decomposee et comparer avec les resultat
+      *des titres puis l'information sur la cote de classement est ajouter aux titre correspondant.
+	  */
 		decompose_cote(ligne, titre);
-		compare_cote(resultat,titre);
+		compare_cote(resultat,titre,num_ligne);//passe en parametre le numero de ligne a comparer
 	//HLR22 finir
+
+		//increment le numero de ligne lorsqu'on change de ligne
+		num_ligne++;
 	}
 fclose(fichier);
 free(ligne);

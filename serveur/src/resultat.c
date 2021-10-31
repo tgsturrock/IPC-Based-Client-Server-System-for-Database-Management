@@ -228,6 +228,29 @@ void fichier_resultat(t_resultat resultat){
 }
 //HLR09 finie
 
+//lab3 serveur-HLR05
+/*
+ * Fonction servant a rajouter une evaluation au titre. Elle calcul un nouveau classement moyen
+ * du titre passer en parametre a partir de la cote recu en parametre
+ */
+void calcul_moyenne(t_titre titre, char* nouvelle_cote){
+
+	//On s'assure que la nouvelle cote se trouve entre 0 et 10
+	if(0<=nouvelle_cote && nouvelle_cote >= 10){
+
+		int nb_votes = titre->nombre_votes;//On stock le nombre de votes du titre
+		double note_moyenne = atof(titre->note_moyenne);//On convertie le note moyenne de string en double et on stock la valeur
+		double cote = atof(nouvelle_cote);//On convertie la valeur de nouvelle cote de char en double
+
+		//On fait le calcul de la nouvelle moyenne
+		double nouvelle_moyenne = note_moyenne+(cote-note_moyenne)/nb_votes;
+		titre->note_moyenne = nouvelle_moyenne;//On stock la nouvelle moyenne
+		titre->nombre_votes++;//On incremente le nombre de votes
+
+	}
+}
+//serveur-HLR05 finie
+
 // Destructeur
 void detruire_titre(t_titre titre) {
 	free(titre->ID);

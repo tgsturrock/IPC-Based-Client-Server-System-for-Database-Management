@@ -236,9 +236,16 @@ while (fgets(ligne, taille_max, fichier) != NULL){
 		//increment le numero de ligne lorsqu'on change de ligne
 		num_ligne++;
 	}
+
+//lab3 Serveur-HLR07
+/*
+ * Fonction  qui permet de mettre a jour la base de donnees de cotes
+ * en copiant chaque ligne du fichier original a l'execption de la ligne
+ * a laquelle on doit rajouter une cote.
+ */
 void fichier_cote(t_titre titre, int cote){
 	int taille_max =1024;
-	t_titre titre = cree_titre();
+	t_titre titre2 = cree_titre();
 	char* ligne = (char*)malloc(taille_max*sizeof(char));
 
 
@@ -260,15 +267,17 @@ void fichier_cote(t_titre titre, int cote){
 			//increment le numero de ligne lorsqu'on change de ligne
 			num_ligne++;
 		}
+	//Serveur-HLR10 finie
+
+	//calcul la nouvelle cote moyenne
+	calcul_moyenne(titre, cote);
+	//on inscrit la nouvelle cote dans le fichier cote
+	fprintf(fp2,"%s\t%s\t%d\n",
+				titre->ID,
+				titre->note_moyenne,
+				titre->nombre_votes);
 	fclose(fp2);
 	fclose(fp);
-
-	calcul_moyenne(titre);
-
-	FILE *fp3 = fopen("nouvelle_cote.tsv", "r");
-		while (fgets(ligne, taille_max, fp3) != NULL){
-
-	}
 
 
 fclose(fp2);

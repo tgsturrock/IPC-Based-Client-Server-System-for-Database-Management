@@ -235,9 +235,22 @@ void fichier_resultat(t_resultat resultat){
  */
 void calcul_moyenne(t_titre titre, char* nouvelle_cote){
 
+
 	//On s'assure que la nouvelle cote se trouve entre 0 et 10
 	if(0<=nouvelle_cote && nouvelle_cote >= 10){
 
+		//Lab3 Serveur-HLR06
+		/*
+		 * On verifie si le titre passe en parametre a deja un classement moyen
+		 * sinon on lui inscrit comme premiere cote celle recu en parametre.
+		 */
+		if(titre->note_moyenne==NULL){
+			titre->nombre_votes=1;
+			titre->note_moyenne=nouvelle_cote;
+		}
+		//Serveur-HLR06 finie
+
+		else{
 		int nb_votes = titre->nombre_votes;//On stock le nombre de votes du titre
 		double note_moyenne = atof(titre->note_moyenne);//On convertie le note moyenne de string en double et on stock la valeur
 		double cote = atof(nouvelle_cote);//On convertie la valeur de nouvelle cote de char en double
@@ -246,7 +259,7 @@ void calcul_moyenne(t_titre titre, char* nouvelle_cote){
 		double nouvelle_moyenne = note_moyenne+(cote-note_moyenne)/nb_votes;
 		titre->note_moyenne = nouvelle_moyenne;//On stock la nouvelle moyenne
 		titre->nombre_votes++;//On incremente le nombre de votes
-
+		}
 	}
 }
 //serveur-HLR05 finie

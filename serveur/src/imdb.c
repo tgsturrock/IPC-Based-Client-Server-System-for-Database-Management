@@ -236,7 +236,43 @@ while (fgets(ligne, taille_max, fichier) != NULL){
 		//increment le numero de ligne lorsqu'on change de ligne
 		num_ligne++;
 	}
-fclose(fichier);
+void fichier_cote(t_titre titre, int cote){
+	int taille_max =1024;
+	t_titre titre = cree_titre();
+	char* ligne = (char*)malloc(taille_max*sizeof(char));
+
+
+	/*
+	 * Ouvre le fichier title_ratings.tsv
+	 */
+	FILE *fp = fopen("data/title_ratings.tsv", "r");
+	FILE *fp2 = fopen("nouvelle_cote.tsv", "w");
+
+	/*
+	 * L'exporation des donnees du fichier cote se fait ligne par ligne.
+	 */
+	while (fgets(ligne, taille_max, fp) != NULL){
+		int num_ligne = 1;//variable permettant de garder en compte le numero de ligne
+
+		if(get_numero_ligne(titre) != num_ligne){
+			fputs(ligne,fp2);
+		}
+			//increment le numero de ligne lorsqu'on change de ligne
+			num_ligne++;
+		}
+	fclose(fp2);
+	fclose(fp);
+
+	calcul_moyenne(titre);
+
+	FILE *fp3 = fopen("nouvelle_cote.tsv", "r");
+		while (fgets(ligne, taille_max, fp3) != NULL){
+
+	}
+
+
+fclose(fp2);
+fclose(fp);
 free(ligne);
 free(titre);
 }

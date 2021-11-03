@@ -215,7 +215,6 @@ void fichier_resultat(t_resultat resultat){
 	//Imprime dans le fichier les champs de cote
 	for(int i = 0; i < (resultat->nb_titre); ++i){
 	if(resultat->titre[i]->nombre_votes > 0){
-
 		fprintf(fichier_cote,"%s\t%s\t%d\n",
 			resultat->titre[i]->ID,
 			resultat->titre[i]->note_moyenne,

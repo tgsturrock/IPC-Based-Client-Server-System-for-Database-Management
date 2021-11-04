@@ -306,18 +306,21 @@ void fichier_cote(t_titre titre, int cote){
 
 	//lab3 Serveur-HLR09
 	/*
-	 * Suite a la mise a jour de la base de donnees on remplace
-	 * l'ancien fichier de cotes de classement par le nouveau fichier cree.
+	 * Suite a la mise a jour de la base de donnees on remplace l'ancien fichier
+	 * de cotes de classement par le nouveau fichier cree.
 	 */
 	rewind(fp2);//On retourne au debut du fichier
 	FILE* fp3 = fopen("data/title_ratings.tsv", "w+");
 
+	/* On parcour le fichier copier de la base de donnees avec la nouvelle cote,
+	 * puis inscit ses ligne dans l'ancien fichier afin de le remplacer.
+	 */
 	while (fgets(ligne, taille_max, fp2) != NULL){
 		fputs(ligne,fp3);
 	}
 	//Serveur-HLR-09 finie
-fclose(fp2);
-fclose(fp3);
+fclose(fp2);//ferme le fichier copier
+fclose(fp3);//ferme le fichier qui remplace l'ancien fichier de cote
 free(ligne);
 }
 //Serveur-HLR07 finie

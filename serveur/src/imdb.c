@@ -225,8 +225,6 @@ FILE *fichier = fopen("data/title_ratings.tsv", "r");
 while (fgets(ligne, taille_max, fichier) != NULL){
 //HLR 19 finie
 
-
-
 	//Lab2-HLR22
 	 /*Chaque ligne de cote lue est decomposee et comparer avec les resultat
       *des titres puis l'information sur la cote de classement est ajouter aux titre correspondant.
@@ -238,6 +236,8 @@ while (fgets(ligne, taille_max, fichier) != NULL){
 		//increment le numero de ligne lorsqu'on change de ligne
 		num_ligne++;
 	}
+fclose(fichier);
+}
 
 //lab3 Serveur-HLR07
 /*
@@ -247,7 +247,6 @@ while (fgets(ligne, taille_max, fichier) != NULL){
  */
 void fichier_cote(t_titre titre, int cote){
 	int taille_max =1024;
-	t_titre titre2 = cree_titre();
 	char* ligne = (char*)malloc(taille_max*sizeof(char));
 	int num_ligne = 1;//variable permettant de garder en compte le numero de ligne
 
@@ -261,13 +260,13 @@ void fichier_cote(t_titre titre, int cote){
 	 * L'exporation des donnees du fichier cote se fait ligne par ligne.
 	 */
 	while (fgets(ligne, taille_max, fp) != NULL){
-
-		//lab3-HLR08
+		//lab3 Serveur-HLR10
 		/*
-		 *
-		 */
-
+		* Si le titre ne contient pas de cote dans la base de donnee
+		 * on rajoute la cote et le titre a la base de donnees/
+		*/
 		if(get_nb_vote(titre)==-1){
+
 			calcul_moyenne(titre,cote);
 			//on inscrit la nouvelle cote dans le fichier cote
 			fprintf(fp2,"%s\t%s\t%d\n",
@@ -275,13 +274,19 @@ void fichier_cote(t_titre titre, int cote){
 						titre->note_moyenne,
 						titre->nombre_votes);
 		}
-		if(get_numero_ligne(titre) != num_ligne){
+		//Serveur-HLR10 finie
+
+		else if(get_numero_ligne(titre) != num_ligne){
+			/*
+			 * On inscrit chacune des lignes de l'ancien fichier si le numero de ligne ne
+			 * correspond pas a celui du titre que l'utilisateur souhaite evaluer
+			 */
 			fputs(ligne,fp2);
 		}
 		else{
 			//lab3 Serveur-HLR08
 			/*
-			 * On ajoute la nouvelle cote de classement au fichier
+			 * On ajoute la nouvelle cote de classement au nouveau fichier
 			 */
 			//calcul la nouvelle cote moyenne
 				calcul_moyenne(titre, cote);
@@ -291,25 +296,29 @@ void fichier_cote(t_titre titre, int cote){
 							titre->note_moyenne,
 							titre->nombre_votes);
 			//Serveur-HLR08 finie
-		}
+			}
 			//increment le numero de ligne lorsqu'on change de ligne
 			num_ligne++;
 		}
 
-	//Serveur-HLR07 finie
 
-	//calcul la nouvelle cote moyenne
-	calcul_moyenne(titre, cote);
-	//on inscrit la nouvelle cote dans le fichier cote
-	fprintf(fp2,"%s\t%s\t%d\n",
-				titre->ID,
-				titre->note_moyenne,
-				titre->nombre_votes);
-	fclose(fp2);
 	fclose(fp);
 
-free(ligne);
-free(titre);
-}
+	//lab3 Serveur-HLR09
+	/*
+	 * Suite a la mise a jour de la base de donnees on remplace
+	 * l'ancien fichier de cotes de classement par le nouveau fichier cree.
+	 */
+	rewind(fp2);//On retourne au debut du fichier
+	FILE* fp3 = fopen("data/title_ratings.tsv", "w+");
 
+	while (fgets(ligne, taille_max, fp2) != NULL){
+		fputs(ligne,fp3);
+	}
+	//Serveur-HLR-09 finie
+fclose(fp2);
+fclose(fp3);
+free(ligne);
+}
+//Serveur-HLR07 finie
 

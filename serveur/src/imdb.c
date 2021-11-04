@@ -269,6 +269,12 @@ void fichier_cote(t_titre titre, int cote){
 			///On calcul la moyenne puis on rajoute un cote au titre
 			calcul_moyenne(titre,cote);
 			//On inscrit la nouvelle cote dans le nouveau fichier cote
+
+			//lab3 Serveur-HLR11
+			/*
+			 * Les modification apportees au fichier de base de donnes doivent respecter
+			 * la structure utilisee par IMDb.
+			 */
 			fprintf(fp2,"%s\t%s\t%d\n",
 						titre->ID,
 						titre->note_moyenne,
@@ -290,12 +296,15 @@ void fichier_cote(t_titre titre, int cote){
 			 */
 			//calcul la nouvelle cote moyenne
 				calcul_moyenne(titre, cote);
+
 				//on inscrit la nouvelle cote dans le fichier cote
+				//lab3 Serveur-HLR11
 				fprintf(fp2,"%s\t%s\t%d\n",
 							titre->ID,
 							titre->note_moyenne,
 							titre->nombre_votes);
 			//Serveur-HLR08 finie
+				//Serveur-HLR11 finie
 			}
 			//increment le numero de ligne lorsqu'on change de ligne
 			num_ligne++;

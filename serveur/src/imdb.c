@@ -260,11 +260,7 @@ void fichier_cote(t_titre titre, int cote){
 	 * L'exporation des donnees du fichier cote se fait ligne par ligne.
 	 */
 	while (fgets(ligne, taille_max, fp) != NULL){
-		//lab3 Serveur-HLR10
-		/*
-		* Si le titre ne contient pas de cote dans la base de donnee
-		 * on rajoute la cote et le titre a la base de donnees/
-		*/
+
 		if(get_nb_vote(titre)==-1){
 
 			calcul_moyenne(titre,cote);
@@ -274,7 +270,7 @@ void fichier_cote(t_titre titre, int cote){
 						titre->note_moyenne,
 						titre->nombre_votes);
 		}
-		//Serveur-HLR10 finie
+
 
 		else if(get_numero_ligne(titre) != num_ligne){
 			/*

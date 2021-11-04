@@ -260,17 +260,21 @@ void fichier_cote(t_titre titre, int cote){
 	 * L'exporation des donnees du fichier cote se fait ligne par ligne.
 	 */
 	while (fgets(ligne, taille_max, fp) != NULL){
-
+		//lab3 Serveur-HLR10
+		/*
+		* Si le titre ne contient pas de cote dans la base de donnee
+		 * on rajoute la cote et le titre a la base de donnees/
+		*/
 		if(get_nb_vote(titre)==-1){
-
+			///On calcul la moyenne puis on rajoute un cote au titre
 			calcul_moyenne(titre,cote);
-			//on inscrit la nouvelle cote dans le fichier cote
+			//On inscrit la nouvelle cote dans le nouveau fichier cote
 			fprintf(fp2,"%s\t%s\t%d\n",
 						titre->ID,
 						titre->note_moyenne,
 						titre->nombre_votes);
 		}
-
+		//Serveur-HLR10 finie
 
 		else if(get_numero_ligne(titre) != num_ligne){
 			/*

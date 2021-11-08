@@ -186,10 +186,7 @@ int main(int argc, char *argv[]) {
 	    taille_resultat_genre=strlen(get_genre_t(get_titre_r(resultat,i)))+1;
 	    taille_resultat_categorie=strlen(get_categorie_t(get_titre_r(resultat,i)))+1;
 	    taille_resultat_ID=strlen(get_ID_t(get_titre_r(resultat,i)))+1;
-	    titre = malloc(taille_resultat_titre*sizeof(char));
-	    genre = malloc(taille_resultat_genre*sizeof(char));
-	    categorie = malloc(taille_resultat_categorie*sizeof(char));
-	    ID = malloc(taille_resultat_ID*sizeof(char));
+
 
 	    noctets=write(descripteur_fifo_resultat_ecriture, &taille_resultat_ID, sizeof(int));
 	    if(noctets < sizeof(int)) {
@@ -238,10 +235,6 @@ int main(int argc, char *argv[]) {
 	      printf("Probleme lors de l'ecriture dans le FIFO\n");
 	      exit(1);
 	    }
-	    free(titre);
-	    free(genre);
-	    free(categorie);
-	    free(ID);
 	    i++;
 	}
 	/* Tube-HLR04 finie */

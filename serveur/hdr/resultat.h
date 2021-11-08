@@ -42,7 +42,9 @@ t_titre cree_titre(void);
 
 t_resultat cree_resultat(void);
 
-void calcul_moyenne(t_titre titre, char* nouvelle_cote);
+t_titre print_titre(t_resultat resultat, int i);
+
+void calcul_moyenne(t_titre titre, int nouvelle_cote);
 
 void set_numero_ligne(t_titre titre, int numero_ligne);
 
@@ -67,6 +69,7 @@ void detruire_titre(t_titre titre);
 
 void detruire_resultat(t_resultat resultat);
 
+t_titre get_titre_ID(t_resultat resultat, char* ID);
 
 /**
  * Observateur de ID

@@ -20,6 +20,7 @@ struct critere {
      * d'evaluation de titre
      */
     int evaluation;
+
     int annee_parution_min;
     int annee_parution_max;
 };

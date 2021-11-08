@@ -17,4 +17,5 @@
 t_resultat lecture(t_critere critere);
 void lecture_cote(t_resultat resultat);
 
+
 #endif

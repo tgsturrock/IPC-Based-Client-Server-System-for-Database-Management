@@ -105,6 +105,8 @@ int main(int argc, char *argv[]) {
     }
     /* Tube-HLR02 finie */
 
+
+
 	// Création de la structure critere et stockage des arguments reçus
 	t_critere critere = creer_critere();
 
@@ -120,6 +122,22 @@ int main(int argc, char *argv[]) {
 		set_annee_parution_max(critere,annee_parution_max);
 	}
 
+	/* Tube-HLR03 : On verifie le fonctionnement */
+
+    printf("Serveur : je recois l'information suivante:\n");
+    printf("Titre: %s\n", get_titre(critere));
+    if (genre){
+        printf("Genre: %s\n", get_genre(critere));
+    }
+    if (categorie){
+    	printf("Categorie: %s\n", get_categorie(critere));
+    }
+    if (annees){
+    	printf("Annee_min: %f\n", get_annee_parution_min(critere));
+    	printf("Annee_max: %f\n", get_annee_parution_max(critere));
+    }
+
+    /* Tube-HLR03 finie */
 
 	//Lab2-HLR24
 	/*

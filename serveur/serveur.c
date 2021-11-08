@@ -18,70 +18,81 @@
  * Serveur-HLR01 finie
  */
 
-#include <unistd.h>
-#include <stdio.h>
+
 #include "recherche.h"
 #include "imdb.h"
 #include "resultat.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <string.h>
+
+#define FIFO_CRITERE_LECTURE "/eclipse-workspace/troisieme-laboratoire/fifo1"
 
 int main(int argc, char *argv[]) {
 	char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL,
 			*cote = NULL;
+    int descripteur_fifo_critere_lecture;
+    int noctets=0;
+    int erreur_serv=0;
+    int taille_titre;
+    int taille_genre;
+    int taille_categorie;
 
-	//Lab3 client-HLR02
-	/*
-	 * On se sert de getopt afin de passer au travers du tableau argv pour retrouver les arguments passer en parametere
-	 * afin d'associer des valeurs au chanps qui sont associees a ces arguments.
-	 */
-	int opt; //variable servant a passer d'un argument a l'autre.
-	int flag = 0;
-	while ((opt = getopt(argc, argv, ":tcagv")) != -1) {
-		switch (opt) {
-		case 't':
-			titre = argv[optind];
-			optind++;
-			break;
-		case 'c':
-			categorie = argv[optind];
-			optind++;
-			break;
-		case 'a':
-			annees = argv[optind];
-			optind++;
-			break;
-		case 'g':
-			genre = argv[optind];
-			optind++;
-			break;
-			//Lab3-HLR03
-			/*
-			 * Argument -v qui permet a l'uti;isateur
-			 * de demander a evaluer un titre
-			 */
-		case 'v':
-			flag = 1;
-			break;
-			//HLR03 finie
-		case ':':
-			printf("Veuillez saisir un titre.\n");
-			break;
-		case '?':
-			printf("unknown option: %c\n", optopt);
-			break;
-		}
-	}
-	// optind is for the extra arguments
-	// which are not parsed
-	for (; optind < argc; optind++) {
-		printf("extra arguments: %s\n", argv[optind]);
-	}
-	//On s<assure qu'au moins un titre est passe en parametre
-	if (titre == NULL) {
-		printf("Veuillez saisir un titre\n");
-		return 0;
-	}
-	//client-HLR02 finie
+
+    erreur_serv = mkfifo(FIFO_CRITERE_LECTURE , 0666);
+    if(erreur_serv != 0) {
+      printf("Erreur lors de la creation du premier FIFO\n");
+      exit(1);
+    }
+    printf("FIFO cree avec succes\n");
+    descripteur_fifo_critere_lecture = open(FIFO_CRITERE_LECTURE, O_RDONLY);
+
+    noctets = read(descripteur_fifo_critere_lecture, &taille_titre, sizeof(int));
+    if(noctets == sizeof(int)) {
+      titre = malloc(taille_titre*sizeof(char));
+    }
+    else {
+      printf("Erreur lors de la lecture du FIFO\n");
+      exit(1);
+    }
+    noctets = read(descripteur_fifo_critere_lecture, titre, taille_titre*sizeof(char));
+    if(noctets != taille_titre*sizeof(char)) {
+      printf("Erreur lors de la lecture du FIFO\n");
+      exit(1);
+    }
+    noctets = read(descripteur_fifo_critere_lecture, &taille_genre, sizeof(int));
+    if(noctets == sizeof(int)) {
+      genre = malloc(taille_genre*sizeof(char));
+    }
+    else {
+      printf("Erreur lors de la lecture du FIFO\n");
+      exit(1);
+    }
+    noctets = read(descripteur_fifo_critere_lecture, genre, taille_genre*sizeof(char));
+    if(noctets != taille_genre*sizeof(char)) {
+      printf("Erreur lors de la lecture du FIFO\n");
+      exit(1);
+    }
+    noctets = read(descripteur_fifo_critere_lecture, &taille_categorie, sizeof(int));
+    if(noctets == sizeof(int)) {
+      categorie = malloc(taille_categorie*sizeof(char));
+    }
+    else {
+      printf("Erreur lors de la lecture du FIFO\n");
+      exit(1);
+    }
+    noctets = read(descripteur_fifo_critere_lecture, categorie, taille_categorie*sizeof(char));
+    if(noctets != taille_categorie*sizeof(char)) {
+      printf("Erreur lors de la lecture du FIFO\n");
+      exit(1);
+    }
+
+
+
 
 	// Création de la structure critere et stockage des arguments reçus
 	t_critere critere = creer_critere();
@@ -145,7 +156,7 @@ int main(int argc, char *argv[]) {
 	}
 	//libere la memoire
 	detruire_resultat(resultat);
-	detruire_critere(critere);
+
 
 
 	return 0;

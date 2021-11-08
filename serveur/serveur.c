@@ -38,10 +38,13 @@ int main(int argc, char *argv[]) {
     int descripteur_fifo_critere_lecture;
     int noctets=0;
     int erreur_serv=0;
+    int annee_parution_min;
+    int annee_parution_max;
     int taille_titre;
     int taille_genre;
     int taille_categorie;
 
+    /* Tube-HLR02 Reception du critere de recherche cote serveur */
 
     erreur_serv = mkfifo(FIFO_CRITERE_LECTURE , 0666);
     if(erreur_serv != 0) {
@@ -90,9 +93,17 @@ int main(int argc, char *argv[]) {
       printf("Erreur lors de la lecture du FIFO\n");
       exit(1);
     }
-
-
-
+    noctets = read(descripteur_fifo_critere_lecture, annee_parution_min, sizeof(int));
+    if(noctets != sizeof(int)) {
+      printf("Erreur lors de la lecture du FIFO\n");
+      exit(1);
+    }
+    noctets = read(descripteur_fifo_critere_lecture, annee_parution_max, sizeof(int));
+    if(noctets != sizeof(int)) {
+      printf("Erreur lors de la lecture du FIFO\n");
+      exit(1);
+    }
+    /* Tube-HLR02 finie */
 
 	// Création de la structure critere et stockage des arguments reçus
 	t_critere critere = creer_critere();
@@ -102,8 +113,13 @@ int main(int argc, char *argv[]) {
 		set_categorie(critere, categorie);
 	if (genre)
 		set_genre(critere, genre);
-	if (annees)
-		set_intervalle_annees(critere, annees);
+	if (annee_parution_min != 0){
+		set_annee_parution_min(critere, annee_parution_min);
+	}
+	if (annee_parution_max != 0){
+		set_annee_parution_max(critere,annee_parution_max);
+	}
+
 
 	//Lab2-HLR24
 	/*

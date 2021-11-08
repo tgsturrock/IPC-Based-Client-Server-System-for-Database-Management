@@ -211,7 +211,7 @@ int main(int argc, char *argv[]) {
 
     detruire_critere(critere);
 
-    /* Tube-HLR05 : receotion des resultats */
+    /* Tube-HLR05 et HLR06 : receotion des resultats */
 
     noctets = read(descripteur_fifo_resultat_lecture, &nb_titre_resultat, sizeof(int));
     if(noctets != sizeof(int)) {
@@ -293,7 +293,7 @@ int main(int argc, char *argv[]) {
         printf("%s\n",genre_r);
         i++;
     }
-    /* Tube-HLR05 et HLR06 finies */
+    /* Tube-HLR05 et HLR06 finie */
     return 0;
 }
 //HLR26 finie

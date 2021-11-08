@@ -57,8 +57,7 @@ int main(int argc, char *argv[]) {
       printf("Erreur lors de la creation du premier FIFO\n");
       exit(1);
     }
-<<<<<<< HEAD
-=======
+
     erreur = mkfifo(FIFO_RESULTAT_ECRITURE , 0666);
     if(erreur != 0) {
       printf("Erreur lors de la creation du second FIFO\n");
@@ -67,7 +66,7 @@ int main(int argc, char *argv[]) {
 
     printf("FIFOs cree avec succes\n");
 
->>>>>>> f26561d90dc9b68caf25134846d4f5c7650624d2
+
     descripteur_fifo_critere_lecture = open(FIFO_CRITERE_LECTURE, O_RDONLY);
     descripteur_fifo_resultat_ecriture=open(FIFO_RESULTAT_ECRITURE,O_WRONLY);
 

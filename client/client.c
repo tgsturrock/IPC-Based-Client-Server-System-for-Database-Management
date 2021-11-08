@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
     	if(noctets < taille_genre*sizeof(char)) {
     		printf("Probleme lors de l'ecriture dans le FIFO\n");
           	exit(1);
-    `	}
+    	}
     }
 
     if (categorie){

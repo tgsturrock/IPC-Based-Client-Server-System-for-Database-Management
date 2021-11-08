@@ -50,12 +50,15 @@ int main(int argc, char *argv[]) {
     int taille_resultat_ID;
 
     /* Tube-HLR02 Reception du critere de recherche cote serveur */
+    printf("Démarrage du serveurs\n");
 
     erreur = mkfifo(FIFO_CRITERE_LECTURE , 0666);
     if(erreur != 0) {
       printf("Erreur lors de la creation du premier FIFO\n");
       exit(1);
     }
+<<<<<<< HEAD
+=======
     erreur = mkfifo(FIFO_RESULTAT_ECRITURE , 0666);
     if(erreur != 0) {
       printf("Erreur lors de la creation du second FIFO\n");
@@ -64,8 +67,11 @@ int main(int argc, char *argv[]) {
 
     printf("FIFOs cree avec succes\n");
 
+>>>>>>> f26561d90dc9b68caf25134846d4f5c7650624d2
     descripteur_fifo_critere_lecture = open(FIFO_CRITERE_LECTURE, O_RDONLY);
     descripteur_fifo_resultat_ecriture=open(FIFO_RESULTAT_ECRITURE,O_WRONLY);
+
+    printf("En attente d'une connexion avec le clients...\n");
 
     noctets = read(descripteur_fifo_critere_lecture, &taille_titre, sizeof(int));
     if(noctets == sizeof(int)) {
@@ -137,17 +143,17 @@ int main(int argc, char *argv[]) {
 
 	/* Tube-HLR03 : On verifie le fonctionnement */
 
-    printf("Serveur : je recois l'information suivante:\n");
-    printf("Titre: %s\n", get_titre(critere));
+    printf("Criteres de recherche:\n");
+    printf("/tTitre: %s\n", get_titre(critere));
     if (genre){
-        printf("Genre: %s\n", get_genre(critere));
+        printf("/tGenre: %s\n", get_genre(critere));
     }
     if (categorie){
-    	printf("Categorie: %s\n", get_categorie(critere));
+    	printf("/tCategorie: %s\n", get_categorie(critere));
     }
     if (annees){
-    	printf("Annee_min: %f\n", get_annee_parution_min(critere));
-    	printf("Annee_max: %f\n", get_annee_parution_max(critere));
+    	printf("/tAnnee_min: %f\n", get_annee_parution_min(critere));
+    	printf("/tAnnee_max: %f\n", get_annee_parution_max(critere));
     }
 
     /* Tube-HLR03 finie */

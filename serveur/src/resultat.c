@@ -39,7 +39,7 @@ struct titre {
  */
 struct resultat {
 	t_titre *titre; //tableau contenant une liste de titre
-	long int nb_titre; // nomnbre de titre contenu dans la liste
+	int nb_titre; // nomnbre de titre contenu dans la liste
 };
 //HLR06	 finie
 

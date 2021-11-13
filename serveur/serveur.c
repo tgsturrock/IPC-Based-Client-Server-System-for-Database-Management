@@ -53,12 +53,15 @@ int main(int argc, char *argv[]) {
 	    int taille_resultat_categorie;
 	    int taille_resultat_ID;
 
-	    /* Tube-HLR02 Reception du critere de recherche cote serveur */
+	    /* Lab3 Tube-HLR02
+	     * Ouverture des fifos, connection avec le client puis
+	     * Reception du critere de recherche cote serveur */
 	    printf("Démarrage du serveurs\n");
 
 	    unlink(FIFO_SERVEUR_ECRITURE);
 	    unlink(FIFO_CLIENT_LECTURE);
 
+	    //Cree les fifo d'ecriture et de lecture entre le serveur et le client
 	    erreur = mkfifo(FIFO_CLIENT_LECTURE , 0666);
 	    if(erreur != 0) {
 	      unlink(FIFO_SERVEUR_ECRITURE);
@@ -66,7 +69,6 @@ int main(int argc, char *argv[]) {
 	      printf("Erreur client lors de la creation du FIFO_CRITERE_ECRITURE\n");
 	      exit(1);
 	    }
-
 	    erreur = mkfifo(FIFO_SERVEUR_ECRITURE , 0666);
 	    if(erreur != 0) {
 	      unlink(FIFO_SERVEUR_ECRITURE);
@@ -75,11 +77,15 @@ int main(int argc, char *argv[]) {
 	      exit(1);
 	    }
 	    else{
+	    	//Si tout fonctionne on attend la connexion avec le client
 	    	printf("En attente d'une connexion avec le clients...\n");
 	    }
+
+	    //Ouverture des fifos du cote serveur
 	    descripteur_fifo_critere_lecture = open(FIFO_CLIENT_LECTURE, O_RDONLY);
 	    descripteur_fifo_resultat_ecriture = open(FIFO_SERVEUR_ECRITURE, O_WRONLY);
 
+	    //On affiche que la connection est etablie
 	    printf("Connexion avec le client établie\n");
 
 	    noctets = read(descripteur_fifo_critere_lecture, &taille_titre, sizeof(int));

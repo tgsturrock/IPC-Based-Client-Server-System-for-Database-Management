@@ -1,0 +1,3 @@
+#!/bin/sh
+cd ../troisieme_laboratoire/applications/
+valgrind --leak-check=full --show-leak-kinds=all \./serveur

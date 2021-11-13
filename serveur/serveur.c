@@ -30,15 +30,18 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#define FIFO_CRITERE_LECTURE "/tmp/fifo1"
-#define FIFO_RESULTAT_ECRITURE "/tmp/fifo2"
+#define FIFO_CLIENT_LECTURE "/tmp/fifo1"
+#define FIFO_SERVEUR_ECRITURE "/tmp/fifo2"
 
 int main(int argc, char *argv[]) {
 	char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL, *ID = NULL, *cote = NULL;
-    int descripteur_fifo_critere_lecture;
+
+	int descripteur_fifo_critere_lecture;
     int descripteur_fifo_resultat_ecriture;
     int noctets=0;
     int erreur=0;
+
+    char null[6]="NULL";
 
     int annee_parution_min;
     int annee_parution_max;
@@ -53,21 +56,21 @@ int main(int argc, char *argv[]) {
     /* Tube-HLR02 Reception du critere de recherche cote serveur */
     printf("Démarrage du serveurs\n");
 
-    unlink(FIFO_RESULTAT_ECRITURE);
-    unlink(FIFO_CRITERE_LECTURE);
+    unlink(FIFO_SERVEUR_ECRITURE);
+    unlink(FIFO_CLIENT_LECTURE);
 
-    erreur = mkfifo(FIFO_CRITERE_LECTURE , 0666);
+    erreur = mkfifo(FIFO_CLIENT_LECTURE , 0666);
     if(erreur != 0) {
-      unlink(FIFO_RESULTAT_ECRITURE);
-      unlink(FIFO_CRITERE_LECTURE);
+      unlink(FIFO_SERVEUR_ECRITURE);
+      unlink(FIFO_CLIENT_LECTURE);
       printf("Erreur client lors de la creation du FIFO_CRITERE_ECRITURE\n");
       exit(1);
     }
 
-    erreur = mkfifo(FIFO_RESULTAT_ECRITURE , 0666);
+    erreur = mkfifo(FIFO_SERVEUR_ECRITURE , 0666);
     if(erreur != 0) {
-      unlink(FIFO_RESULTAT_ECRITURE);
-      unlink(FIFO_CRITERE_LECTURE);
+      unlink(FIFO_SERVEUR_ECRITURE);
+      unlink(FIFO_CLIENT_LECTURE);
       printf("Erreur lors de la creation du FIFO_RESULTAT_LECTURE\n");
       exit(1);
     }
@@ -75,7 +78,8 @@ int main(int argc, char *argv[]) {
     	printf("En attente d'une connexion avec le clients...\n");
     }
 
-    descripteur_fifo_critere_lecture = open(FIFO_CRITERE_LECTURE, O_RDONLY);
+    descripteur_fifo_critere_lecture = open(FIFO_CLIENT_LECTURE, O_RDONLY);
+    descripteur_fifo_resultat_ecriture=open(FIFO_SERVEUR_ECRITURE, O_WRONLY);
 
     printf("Connexion avec le client établie\n");
 
@@ -87,11 +91,15 @@ int main(int argc, char *argv[]) {
       printf("Erreur lors de la lecture du de la taille du champ titre\n");
       exit(1);
     }
+    printf("\tnoctects Size Titre: %d\n",noctets);
     noctets = read(descripteur_fifo_critere_lecture, titre, taille_titre*sizeof(char));
     if(noctets != taille_titre*sizeof(char)) {
       printf("Erreur lors de la lecture du champ titre\n");
       exit(1);
     }
+    printf("\tTitre: %s\n", titre);
+
+
     noctets = read(descripteur_fifo_critere_lecture, &taille_genre, sizeof(int));
     if(noctets == sizeof(int)) {
       genre = malloc(taille_genre*sizeof(char));
@@ -100,11 +108,14 @@ int main(int argc, char *argv[]) {
       printf("Erreur lors de la lecture de la taille du champ genre\n");
       exit(1);
     }
+    printf("\tnoctects SIZE GENRE: %d\n",noctets);
     noctets = read(descripteur_fifo_critere_lecture, genre, taille_genre*sizeof(char));
     if(noctets != taille_genre*sizeof(char)) {
       printf("Erreur lors de la lecture du du champ genre\n");
       exit(1);
     }
+    printf("\tGenre: %s\n", genre);
+
     noctets = read(descripteur_fifo_critere_lecture, &taille_categorie, sizeof(int));
     if(noctets == sizeof(int)) {
       categorie = malloc(taille_categorie*sizeof(char));
@@ -113,11 +124,14 @@ int main(int argc, char *argv[]) {
       printf("Erreur lors de la lecture de la taille du champ categorie\n");
       exit(1);
     }
+    printf("\tnoctects SIZE CATEGORIE: %d\n",noctets);
     noctets = read(descripteur_fifo_critere_lecture, categorie, taille_categorie*sizeof(char));
     if(noctets != taille_categorie*sizeof(char)) {
       printf("Erreur lors de la lecture du champ categorie\n");
       exit(1);
     }
+    printf("\tCategorie: %s\n", categorie);
+
     noctets = read(descripteur_fifo_critere_lecture, &annee_parution_min, sizeof(int));
     if(noctets != sizeof(int)) {
       printf("Erreur lors de la lecture de l'annee de parution minimum\n");
@@ -134,10 +148,17 @@ int main(int argc, char *argv[]) {
 	t_critere critere = creer_critere();
 
 	set_titre(critere, titre);
-	if (categorie)
+	if (strcmp(categorie,null)!=0){
 		set_categorie(critere, categorie);
-	if (genre)
+	}else{
+		free(categorie);
+	}
+	if (strcmp(genre,null) != 0){
 		set_genre(critere, genre);
+	}else{
+		free(genre);
+	}
+
 	if (annee_parution_min != 0){
 		set_annee_parution_min(critere, annee_parution_min);
 	}
@@ -150,16 +171,16 @@ int main(int argc, char *argv[]) {
 	 */
 
     printf("Réception des criteres de recherche:\n");
-    printf("/tTitre: %s\n", get_titre(critere));
+    printf("\tTitre: %s\n", get_titre(critere));
     if (genre){
-        printf("/tGenre: %s\n", get_genre(critere));
+        printf("\tGenre: %s\n", get_genre(critere));
     }
     if (categorie){
-    	printf("/tCategorie: %s\n", get_categorie(critere));
+    	printf("\tCategorie: %s\n", get_categorie(critere));
     }
     if (annees){
-    	printf("/tAnnee_min: %i\n", get_annee_parution_min(critere));
-    	printf("/tAnnee_max: %i\n", get_annee_parution_max(critere));
+    	printf("\tAnnee_min: %i\n", get_annee_parution_min(critere));
+    	printf("\tAnnee_max: %i\n", get_annee_parution_max(critere));
     }
 
     /* Tube-HLR03 finie */
@@ -185,13 +206,7 @@ int main(int argc, char *argv[]) {
 	//HLR25 finie
 
 	/* Tube-HL:R04 : Envoi des resultats cote serveur */
-    erreur = mkfifo(FIFO_RESULTAT_ECRITURE , 0666);
-    if(erreur != 0) {
-      printf("Erreur serveur lors de la creation du FIFO_RESULTAT_ECRITURE\n");
-      exit(1);
-    }
 
-    descripteur_fifo_resultat_ecriture=open(FIFO_RESULTAT_ECRITURE,O_WRONLY);
 
 	int nb_titre = get_nb_titre(resultat);
     noctets=write(descripteur_fifo_resultat_ecriture, &nb_titre, sizeof(int));

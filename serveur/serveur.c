@@ -18,81 +18,173 @@
  * Serveur-HLR01 finie
  */
 
-#include <unistd.h>
-#include <stdio.h>
 #include "recherche.h"
 #include "imdb.h"
 #include "resultat.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <string.h>
+
+#define FIFO_CLIENT_LECTURE "/tmp/fifo1"
+#define FIFO_SERVEUR_ECRITURE "/tmp/fifo2"
+
 
 int main(int argc, char *argv[]) {
 	char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL,
 			*cote = NULL;
+	int descripteur_fifo_critere_lecture;
+	int descripteur_fifo_resultat_ecriture;
+	int noctets=0;
+	    int erreur=0;
 
-	//Lab3 client-HLR02
-	/*
-	 * On se sert de getopt afin de passer au travers du tableau argv pour retrouver les arguments passer en parametere
-	 * afin d'associer des valeurs au chanps qui sont associees a ces arguments.
-	 */
-	int opt; //variable servant a passer d'un argument a l'autre.
-	int flag = 0;
-	while ((opt = getopt(argc, argv, ":tcagv")) != -1) {
-		switch (opt) {
-		case 't':
-			titre = argv[optind];
-			optind++;
-			break;
-		case 'c':
-			categorie = argv[optind];
-			optind++;
-			break;
-		case 'a':
-			annees = argv[optind];
-			optind++;
-			break;
-		case 'g':
-			genre = argv[optind];
-			optind++;
-			break;
-			//Lab3-HLR03
-			/*
-			 * Argument -v qui permet a l'uti;isateur
-			 * de demander a evaluer un titre
-			 */
-		case 'v':
-			flag = 1;
-			break;
-			//HLR03 finie
-		case ':':
-			printf("Veuillez saisir un titre.\n");
-			break;
-		case '?':
-			printf("unknown option: %c\n", optopt);
-			break;
+	    char null[2]="0";
+
+	    int annee_parution_min;
+	    int annee_parution_max;
+	    int taille_titre;
+	    int taille_genre;
+	    int taille_categorie;
+	    int taille_resultat_titre;
+	    int taille_resultat_genre;
+	    int taille_resultat_categorie;
+	    int taille_resultat_ID;
+
+	    /* Tube-HLR02 Reception du critere de recherche cote serveur */
+	    printf("Démarrage du serveurs\n");
+
+	    unlink(FIFO_SERVEUR_ECRITURE);
+	    unlink(FIFO_CLIENT_LECTURE);
+
+	    erreur = mkfifo(FIFO_CLIENT_LECTURE , 0666);
+	    if(erreur != 0) {
+	      unlink(FIFO_SERVEUR_ECRITURE);
+	      unlink(FIFO_CLIENT_LECTURE);
+	      printf("Erreur client lors de la creation du FIFO_CRITERE_ECRITURE\n");
+	      exit(1);
+	    }
+
+	    erreur = mkfifo(FIFO_SERVEUR_ECRITURE , 0666);
+	    if(erreur != 0) {
+	      unlink(FIFO_SERVEUR_ECRITURE);
+	      unlink(FIFO_CLIENT_LECTURE);
+	      printf("Erreur lors de la creation du FIFO_RESULTAT_LECTURE\n");
+	      exit(1);
+	    }
+	    else{
+	    	printf("En attente d'une connexion avec le clients...\n");
+	    }
+	    descripteur_fifo_critere_lecture = open(FIFO_CLIENT_LECTURE, O_RDONLY);
+	    descripteur_fifo_resultat_ecriture=open(FIFO_SERVEUR_ECRITURE, O_WRONLY);
+
+	    printf("Connexion avec le client établie\n");
+
+	    noctets = read(descripteur_fifo_critere_lecture, &taille_titre, sizeof(int));
+	    if(noctets == sizeof(int)) {
+	      titre = malloc(taille_titre*sizeof(char));
+	    }
+	    else {
+	      printf("Erreur lors de la lecture du de la taille du champ titre\n");
+	      exit(1);
+	    }
+	    printf("\tnoctects Size Titre: %d\n",noctets);
+	    noctets = read(descripteur_fifo_critere_lecture, titre, taille_titre*sizeof(char));
+	    if(noctets != taille_titre*sizeof(char)) {
+	      printf("Erreur lors de la lecture du champ titre\n");
+	      exit(1);
+	    }
+	    printf("\tTitre: %s\n", titre);
+
+
+	    noctets = read(descripteur_fifo_critere_lecture, &taille_genre, sizeof(int));
+	    if(noctets == sizeof(int)) {
+	      genre = malloc(taille_genre*sizeof(char));
+	    }
+	    else {
+	      printf("Erreur lors de la lecture de la taille du champ genre\n");
+	      exit(1);
+	    }
+	    printf("\tnoctects SIZE GENRE: %d\n",noctets);
+	    noctets = read(descripteur_fifo_critere_lecture, genre, taille_genre*sizeof(char));
+	    if(noctets != taille_genre*sizeof(char)) {
+	      printf("Erreur lors de la lecture du du champ genre\n");
+	      exit(1);
+	    }
+	    printf("\tGenre: %s\n", genre);
+
+	    noctets = read(descripteur_fifo_critere_lecture, &taille_categorie, sizeof(int));
+	    if(noctets == sizeof(int)) {
+	      categorie = malloc(taille_categorie*sizeof(char));
+	    }
+	    else {
+	      printf("Erreur lors de la lecture de la taille du champ categorie\n");
+	      exit(1);
+	    }
+	    printf("\tnoctects SIZE CATEGORIE: %d\n",noctets);
+	    noctets = read(descripteur_fifo_critere_lecture, categorie, taille_categorie*sizeof(char));
+	    if(noctets != taille_categorie*sizeof(char)) {
+	      printf("Erreur lors de la lecture du champ categorie\n");
+	      exit(1);
+	    }
+	    printf("\tCategorie: %s\n", categorie);
+
+	    noctets = read(descripteur_fifo_critere_lecture, &annee_parution_min, sizeof(int));
+	    if(noctets != sizeof(int)) {
+	      printf("Erreur lors de la lecture de l'annee de parution minimum\n");
+	      exit(1);
+	    }
+	    noctets = read(descripteur_fifo_critere_lecture, &annee_parution_max, sizeof(int));
+	    if(noctets != sizeof(int)) {
+	      printf("Erreur lors de la lecture de l'annee de parution maximum\n");
+	      exit(1);
+	    }
+	    /* Lab3 Tube-HLR02 finie */
+
+		// Création de la structure critere et stockage des arguments reçus
+		t_critere critere = creer_critere();
+
+		set_titre(critere, titre);
+		if (strcmp(categorie,null)!=0){
+			set_categorie(critere, categorie);
+		}else{
+			free(categorie);
 		}
-	}
-	// optind is for the extra arguments
-	// which are not parsed
-	for (; optind < argc; optind++) {
-		printf("extra arguments: %s\n", argv[optind]);
-	}
-	//On s<assure qu'au moins un titre est passe en parametre
-	if (titre == NULL) {
-		printf("Veuillez saisir un titre\n");
-		return 0;
-	}
-	//client-HLR02 finie
+		if (strcmp(genre,null) != 0){
+			set_genre(critere, genre);
+		}else{
+			free(genre);
+		}
 
-	// Création de la structure critere et stockage des arguments reçus
-	t_critere critere = creer_critere();
+		if (annee_parution_min != 0){
+			set_annee_parution_min(critere, annee_parution_min);
+		}
+		if (annee_parution_max != 0){
+			set_annee_parution_max(critere,annee_parution_max);
+		}
 
-	set_titre(critere, titre);
-	if (categorie)
-		set_categorie(critere, categorie);
-	if (genre)
-		set_genre(critere, genre);
-	if (annees)
-		set_intervalle_annees(critere, annees);
+		/* Lab3 Tube-HLR03 : On verifie le fonctionnement
+		 * On affiche les valeurs des champs recu par le client.
+		 */
+
+	    printf("Réception des criteres de recherche:\n");
+	    printf("\tTitre: %s\n", get_titre(critere));
+	    if (genre){
+	        printf("\tGenre: %s\n", get_genre(critere));
+	    }
+	    if (categorie){
+	    	printf("\tCategorie: %s\n", get_categorie(critere));
+	    }
+	    if (annee_parution_min != 0 && annee_parution_max != 0){
+	    	printf("\tAnnee_min: %i\n", get_annee_parution_min(critere));
+	    	printf("\tAnnee_max: %i\n", get_annee_parution_max(critere));
+	    }
+
+	    /* Tube-HLR03 finie */
+
+
 
 	//Lab2-HLR24
 	/*

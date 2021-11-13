@@ -161,9 +161,10 @@ t_titre print_titre(t_resultat resultat, int i) {
 							resultat->titre[i]->titre,
 							resultat->titre[i]->annee_parution_min,
 							resultat->titre[i]->categorie, resultat->titre[i]->genre);
-			return resultat->titre[j];
+			return resultat->titre[i];
 		}
 	}
+	return 1;
 }
 void fichier_resultat(t_resultat resultat) {
 
@@ -246,7 +247,7 @@ void calcul_moyenne(t_titre titre, int nouvelle_cote) {
 	//On s'assure que la nouvelle cote se trouve entre 0 et 10
 	if (nouvelle_cote >= 0 && nouvelle_cote <= 10) {
 
-		//Lab3 Serveur-HLR06
+		//Lab3 serveur-HLR06
 		/*
 		 * On verifie si le titre passe en parametre a deja un classement moyen
 		 * sinon on lui inscrit comme premiere cote celle recu en parametre.
@@ -256,7 +257,7 @@ void calcul_moyenne(t_titre titre, int nouvelle_cote) {
 			titre->note_moyenne = malloc(sizeof(int));
 			sprintf(titre->note_moyenne,"%i",nouvelle_cote); //On stock la nouvelle moyenne
 		}
-		//Serveur-HLR06 finie
+		//serveur-HLR06 finie
 
 		else {
 			int nb_votes = titre->nombre_votes; //On stock le nombre de votes du titre
@@ -288,7 +289,7 @@ void detruire_resultat(t_resultat resultat) {
 
 // Mutateurs
 
-//HLR 16
+//Lab2 HLR 16
 /*
  * Fonction qui permet d'ajouter les information
  * de cote de classement a la structure titre.
@@ -297,9 +298,9 @@ void set_note_et_nombre_t(t_titre titre, char *note_moyenne, int nombre_votes) {
 	titre->note_moyenne = note_moyenne;
 	titre->nombre_votes = nombre_votes;
 }
-//HLR16 finie
+//Lab2 HLR16 finie
 
-//serveur-HLR04
+//Lab3 serveur-HLR04
 void set_numero_ligne(t_titre titre, int numero_ligne) {
 	titre->numero_ligne = numero_ligne;
 }
@@ -395,7 +396,7 @@ t_titre get_titre_ID(t_resultat resultat, char* ID) {
 				return resultat->titre[i];
 			}
 		}
-						   ;
+	return 1;
 }
 int get_nb_titre(t_resultat resultat) {
 	return resultat->nb_titre;

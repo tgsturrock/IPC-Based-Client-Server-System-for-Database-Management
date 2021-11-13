@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 	    	printf("En attente d'une connexion avec le clients...\n");
 	    }
 	    descripteur_fifo_critere_lecture = open(FIFO_CLIENT_LECTURE, O_RDONLY);
-	    descripteur_fifo_resultat_ecriture=open(FIFO_SERVEUR_ECRITURE, O_WRONLY);
+	    descripteur_fifo_resultat_ecriture = open(FIFO_SERVEUR_ECRITURE, O_WRONLY);
 
 	    printf("Connexion avec le client établie\n");
 
@@ -90,13 +90,13 @@ int main(int argc, char *argv[]) {
 	      printf("Erreur lors de la lecture du de la taille du champ titre\n");
 	      exit(1);
 	    }
-	    printf("\tnoctects Size Titre: %d\n",noctets);
+
 	    noctets = read(descripteur_fifo_critere_lecture, titre, taille_titre*sizeof(char));
 	    if(noctets != taille_titre*sizeof(char)) {
 	      printf("Erreur lors de la lecture du champ titre\n");
 	      exit(1);
 	    }
-	    printf("\tTitre: %s\n", titre);
+
 
 
 	    noctets = read(descripteur_fifo_critere_lecture, &taille_genre, sizeof(int));
@@ -107,13 +107,12 @@ int main(int argc, char *argv[]) {
 	      printf("Erreur lors de la lecture de la taille du champ genre\n");
 	      exit(1);
 	    }
-	    printf("\tnoctects SIZE GENRE: %d\n",noctets);
+
 	    noctets = read(descripteur_fifo_critere_lecture, genre, taille_genre*sizeof(char));
 	    if(noctets != taille_genre*sizeof(char)) {
 	      printf("Erreur lors de la lecture du du champ genre\n");
 	      exit(1);
 	    }
-	    printf("\tGenre: %s\n", genre);
 
 	    noctets = read(descripteur_fifo_critere_lecture, &taille_categorie, sizeof(int));
 	    if(noctets == sizeof(int)) {
@@ -123,13 +122,13 @@ int main(int argc, char *argv[]) {
 	      printf("Erreur lors de la lecture de la taille du champ categorie\n");
 	      exit(1);
 	    }
-	    printf("\tnoctects SIZE CATEGORIE: %d\n",noctets);
+
 	    noctets = read(descripteur_fifo_critere_lecture, categorie, taille_categorie*sizeof(char));
 	    if(noctets != taille_categorie*sizeof(char)) {
 	      printf("Erreur lors de la lecture du champ categorie\n");
 	      exit(1);
 	    }
-	    printf("\tCategorie: %s\n", categorie);
+
 
 	    noctets = read(descripteur_fifo_critere_lecture, &annee_parution_min, sizeof(int));
 	    if(noctets != sizeof(int)) {
@@ -147,17 +146,16 @@ int main(int argc, char *argv[]) {
 		t_critere critere = creer_critere();
 
 		set_titre(critere, titre);
-		if (strcmp(categorie,null)!=0){
+		if (strcmp(categorie,null)!=0)
 			set_categorie(critere, categorie);
-		}else{
+		else{
 			free(categorie);
 		}
-		if (strcmp(genre,null) != 0){
+		if (strcmp(genre,null) != 0)
 			set_genre(critere, genre);
-		}else{
+		else{
 			free(genre);
 		}
-
 		if (annee_parution_min != 0){
 			set_annee_parution_min(critere, annee_parution_min);
 		}
@@ -171,10 +169,10 @@ int main(int argc, char *argv[]) {
 
 	    printf("Réception des criteres de recherche:\n");
 	    printf("\tTitre: %s\n", get_titre(critere));
-	    if (genre){
+	    if (get_genre(critere) != NULL){
 	        printf("\tGenre: %s\n", get_genre(critere));
 	    }
-	    if (categorie){
+	    if (get_categorie(critere)!= NULL){
 	    	printf("\tCategorie: %s\n", get_categorie(critere));
 	    }
 	    if (annee_parution_min != 0 && annee_parution_max != 0){

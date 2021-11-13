@@ -39,7 +39,7 @@ struct titre {
  */
 struct resultat {
 	t_titre *titre; //tableau contenant une liste de titre
-	long int nb_titre; // nomnbre de titre contenu dans la liste
+	int nb_titre; // nomnbre de titre contenu dans la liste
 };
 //HLR06	 finie
 
@@ -164,7 +164,6 @@ t_titre print_titre(t_resultat resultat, int i) {
 			return resultat->titre[j];
 		}
 	}
-	return 1;
 }
 void fichier_resultat(t_resultat resultat) {
 
@@ -196,6 +195,8 @@ void fichier_resultat(t_resultat resultat) {
 	/*On affiche dans le terminal les resultats de la recherche
 	 * au lieu de les ecrire dans un fichier txt
 	 */
+	printf("Visualisation des résultats\n");
+	printf("\t %i resultat de titre trouvés\n", resultat->nb_titre);
 	for (int i = 0; i < (resultat->nb_titre); i++) {
 		printf("\t[%d] - %s\t%s\t%d\t%s\t%s\t\n",
 				i, resultat->titre[i]->ID,

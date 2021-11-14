@@ -307,6 +307,9 @@ int main(int argc, char *argv[]) {
 			exit(1);
 		}
 	//comm-HLR07 finie
+
+		//Lab3 comm-HLR08
+		/*Le serveur cherche les données de classement du titre à évaluer et les envoie au client.*/
 		t_titre titre_chercher = cree_titre();
 		titre_chercher = print_titre(resultat,num_titre);
 
@@ -343,7 +346,7 @@ int main(int argc, char *argv[]) {
 			printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
 			exit(1);
 		}
-
+	//comm-HLR08 finie
 	}
 	//Tube-HLR04 finie
 	//comm-HLR03 finie

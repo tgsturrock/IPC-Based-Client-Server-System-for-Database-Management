@@ -350,6 +350,13 @@ int main(int argc, char *argv[]) {
 	}
 	//Tube-HLR04 finie
 	//comm-HLR03 finie
+
+		noctets = read(descripteur_fifo_client_lecture, &vote , sizeof(int));
+		if(noctets < sizeof(int)) {
+			printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
+			exit(1);
+		}
+
 /*
 	int note;
 	t_titre titre_chercher = cree_titre();

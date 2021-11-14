@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
 	int num_titre;
 	int taille_cote;
 	int vote;
+	int cote;
 
 	/* Lab3 Tube-HLR02
 	 * Ouverture des fifos, connection avec le client puis
@@ -347,15 +348,20 @@ int main(int argc, char *argv[]) {
 			exit(1);
 		}
 	//comm-HLR08 finie
-	}
-	//Tube-HLR04 finie
-	//comm-HLR03 finie
-
+		//Lab3 comm-HLR11
+		/*Le serveur est capable de recevoir la note sur 10 du client
+		 *et de calculer la nouvelle cote de classement du titre évalué.*/
 		noctets = read(descripteur_fifo_client_lecture, &vote , sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
 			exit(1);
 		}
+		fichier_cote(titre_chercher, vote);
+		//comm-HLR11 finie
+	}
+	//Tube-HLR04 finie
+	//comm-HLR03 finie
+
 
 /*
 	int note;

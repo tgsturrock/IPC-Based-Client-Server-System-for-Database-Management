@@ -49,10 +49,11 @@ int main(int argc, char *argv[]) {
 	int taille_genre;
 	int taille_categorie;
 	int taille_ID;
-	int BUFFSIZE;
+
 	int flag;
 	int num_titre;
 	int taille_cote;
+	int vote;
 
 	/* Lab3 Tube-HLR02
 	 * Ouverture des fifos, connection avec le client puis
@@ -294,15 +295,15 @@ int main(int argc, char *argv[]) {
 			exit(1);
 		}
 	}
-
+	printf("[*] Resultats envoyes \n");
 
 	//Lab3 comm-HLR07
 	/*Si le champ relié à l'argument -v a bien été reçu lors du requis Comm-HLR02,
 	 *le serveur est capable de récupérer le titre à évaluer par le client.*/
-	if(flag == 1){
+		if(flag == 1){
 		noctets = read(descripteur_fifo_client_lecture, &num_titre, sizeof(int));
 		if(noctets != sizeof(int)) {
-			printf("Erreur lors de la lecture de l'annee de parution minimum\n");
+			printf("Erreur lors de la lecture du numero de titre a evaluer \n");
 			exit(1);
 		}
 	//comm-HLR07 finie

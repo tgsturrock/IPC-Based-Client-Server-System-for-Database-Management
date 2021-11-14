@@ -250,6 +250,12 @@ int main(int argc, char *argv[]) {
 		}
 
 	}
+
+	noctets=write(descripteur_fifo_client_ecriture, &flag, sizeof(int));
+	if(noctets < sizeof(int)) {
+		printf("Probleme lors de l'ecriture dans le FIFO\n");
+		exit(1);
+	}
 	// Tube-HLR01 finie
 	// Comm-HLR01 finie
 
@@ -387,7 +393,7 @@ int main(int argc, char *argv[]) {
 	//Lab3 comm-HLR05
 	/*Si l'argument -v a été donné par l'utilisateur, le client doit demander à l'utilisateur
 	 *quel titre désire-t-il évaluer dans la liste des résultats reçus du serveur.*/
-	if(get_evaluation(critere)==1){
+	if(flag==1){
 		printf("[-] Veuillez choisir un titre a evaluer");
 		scanf("%i",&num_titre);
 		//comm-HLR05 finie
@@ -438,7 +444,7 @@ int main(int argc, char *argv[]) {
 		}
 		printf("%i\t \n",nb_vote_eval);
 		//comm-HLR09 finie
-		}
+
 		//Lab 3 comm-HLR10
 		/* On demande la note et on l'envoie au serveur */
 		printf("Quelle note sur 10 donnez-vous ?");

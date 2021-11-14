@@ -285,6 +285,10 @@ int main(int argc, char *argv[]) {
 	/*
 	 * Pour chaque resultats reçus on affiche ses champs a l'usager
 	 */
+
+	//Lab3 comm-HLR04
+	/*Le client est capable de recuperer les resultats de recherche envoyes par le serveur
+	 *et de les afficher a l<utilisateur*/
 	while(i<nb_titre){
 
 		printf("\t[%i] ",i+1);
@@ -368,7 +372,8 @@ int main(int argc, char *argv[]) {
 		free(genreR);
 		i++;
 	}
-    /* Tube-HLR04*/
+    // Tube-HLR04 finie
+	// comm-HLR04 finie
 
 	close(descripteur_fifo_client_ecriture);
 	close(descripteur_fifo_serveur_lecture);

@@ -50,6 +50,8 @@ int main(int argc, char *argv[]) {
 	int taille_categorie;
 	int taille_ID;
 	int BUFFSIZE;
+	int flag;
+	int num_titre;
 
 	/* Lab3 Tube-HLR02
 	 * Ouverture des fifos, connection avec le client puis
@@ -141,6 +143,12 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	noctets = read(descripteur_fifo_client_lecture, &annee_parution_max, sizeof(int));
+	if(noctets != sizeof(int)) {
+		printf("Erreur lors de la lecture de l'annee de parution maximum\n");
+		exit(1);
+	}
+	//Lecture du critere d'evaluation
+	noctets = read(descripteur_fifo_client_lecture, &flag, sizeof(int));
 	if(noctets != sizeof(int)) {
 		printf("Erreur lors de la lecture de l'annee de parution maximum\n");
 		exit(1);
@@ -284,6 +292,56 @@ int main(int argc, char *argv[]) {
 			printf("Probleme lors de l'ecriture du champ genre dans le FIFO\n");
 			exit(1);
 		}
+	}
+
+
+	//Lab3 comm-HLR07
+	/*Si le champ relié à l'argument -v a bien été reçu lors du requis Comm-HLR02,
+	 *le serveur est capable de récupérer le titre à évaluer par le client.*/
+	if(flag == 1){
+		noctets = read(descripteur_fifo_client_lecture, &num_titre, sizeof(int));
+		if(noctets != sizeof(int)) {
+			printf("Erreur lors de la lecture de l'annee de parution minimum\n");
+			exit(1);
+		}
+	//comm-HLR07 finie
+		t_titre titre_chercher = cree_titre();
+		titre_chercher = print_titre(resultat,num_titre);
+
+		//On envoit le champ ID et sa taille au client
+		taille_ID = strlen(get_ID_t(titre_chercher))+1;
+		noctets = write(descripteur_fifo_serveur_ecriture, &taille_ID, sizeof(int));
+		if(noctets < sizeof(int)) {
+			printf("Probleme lors de l'ecriture de la taille du champ ID dans le FIFO\n");
+			exit(1);
+		}
+		noctets = write(descripteur_fifo_serveur_ecriture,get_ID_t(titre_chercher),taille_ID*sizeof(char));
+		if(noctets < taille_ID*sizeof(char)) {
+			printf("Probleme lors de l'ecriture du champ ID dans le FIFO\n");
+			exit(1);
+		}
+
+		//On envoit le champ cote et sa taille au client
+		taille_cote= strlen(get_moyenne(titre_chercher))+1;
+		noctets = write(descripteur_fifo_serveur_ecriture, &taille_cote, sizeof(int));
+		if(noctets < sizeof(int)) {
+			printf("Probleme lors de l'ecriture de la taille du champ ID dans le FIFO\n");
+			exit(1);
+		}
+		noctets = write(descripteur_fifo_serveur_ecriture,get_moyenne(titre_chercher),taille_cote*sizeof(char));
+		if(noctets < taille_cote*sizeof(char)) {
+			printf("Probleme lors de l'ecriture du champ ID dans le FIFO\n");
+			exit(1);
+		}
+
+		//On envoi le nombre de vote
+		vote = get_vote(titre_chercher);
+		noctets = write(descripteur_fifo_serveur_ecriture, &vote , sizeof(int));
+		if(noctets < sizeof(int)) {
+			printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
+			exit(1);
+		}
+
 	}
 	//Tube-HLR04 finie
 	//comm-HLR03 finie

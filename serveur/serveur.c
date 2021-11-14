@@ -181,13 +181,12 @@ int main(int argc, char *argv[]) {
 		printf("\tAnnee_max: %i\n", get_annee_parution_max(critere));
 	}
 
-	free(titre);
 	/* Tube-HLR03 finie */
 
 	//recherche dans la base de donnee pour des titre qui concorde avec les criteres de recherche
-	printf("[*] Exploration de la base de donnees");
+	printf("[*] Exploration de la base de donnees\n");
 	t_resultat resultat = lecture(critere);
-	detruire_critere(critere);
+
 	//Ajout des cotes de moyenne et nombre de vote aux resultats
 	lecture_cote(resultat);
 	//Lab2-HLR24 finie
@@ -212,6 +211,7 @@ int main(int argc, char *argv[]) {
 
 	t_titre titre_resultat = cree_titre();
 	int taille_categorie_r;
+
 	for(int i =0 ;i<nb_titre;i++){
 
 		titre_resultat = get_titre_r(resultat, i);

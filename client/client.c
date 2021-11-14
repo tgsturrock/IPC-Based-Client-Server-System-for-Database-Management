@@ -292,7 +292,7 @@ int main(int argc, char *argv[]) {
 		printf("\t[%i] ",i+1);
 
 		//Lecture et affichage du champ ID
-		noctets=read(descripteur_fifo_serveur_lecture, &taille_ID, sizeof(int));
+		noctets = read(descripteur_fifo_serveur_lecture, &taille_ID, sizeof(int));
 		if(noctets == sizeof(int)) {
 			ID_r = malloc(taille_ID*sizeof(char));
 		}
@@ -300,7 +300,7 @@ int main(int argc, char *argv[]) {
 			printf("Erreur lors de la lecture de la taille du champ ID du FIFO\n");
 			exit(1);
 		}
-		noctets=read(descripteur_fifo_serveur_lecture,ID_r,taille_ID*sizeof(char));
+		noctets = read(descripteur_fifo_serveur_lecture,ID_r,taille_ID*sizeof(char));
 		if(noctets != taille_ID*sizeof(char)) {
 			printf("Erreur lors de la lecture du champ ID du FIFO\n");
 			exit(1);
@@ -308,7 +308,7 @@ int main(int argc, char *argv[]) {
 		printf("%s\t",ID_r);
 
 		//Lecture et affichage du champ categorie
-		noctets=read(descripteur_fifo_serveur_lecture, &taille_categorie, sizeof(int));
+		noctets = read(descripteur_fifo_serveur_lecture, &taille_categorie, sizeof(int));
 		if(noctets == sizeof(int)) {
 			categorie_r = malloc(taille_categorie*sizeof(char));
 		}
@@ -316,7 +316,7 @@ int main(int argc, char *argv[]) {
 			printf("Erreur lors de la lecture de la taille du champ categorie du FIFO\n");
 			exit(1);
 		}
-		noctets=read(descripteur_fifo_serveur_lecture,categorie_r,taille_categorie*sizeof(char));
+		noctets = read(descripteur_fifo_serveur_lecture,categorie_r,taille_categorie*sizeof(char));
 		if(noctets != taille_categorie*sizeof(char)) {
 			printf("Erreur lors de la lecture du champ categorie du FIFO\n");
 			exit(1);
@@ -324,7 +324,7 @@ int main(int argc, char *argv[]) {
 		printf("%s\t",categorie_r);
 
 		//Lecture et affichage du champ titre
-		noctets=read(descripteur_fifo_serveur_lecture, &taille_titre, sizeof(int));
+		noctets = read(descripteur_fifo_serveur_lecture, &taille_titre, sizeof(int));
 		if(noctets == sizeof(int)) {
 			titre_r = malloc(taille_titre*sizeof(char));
 		}
@@ -332,7 +332,7 @@ int main(int argc, char *argv[]) {
 			printf("Erreur lors de la lecture de la taille du champ titre du FIFO\n");
 			exit(1);
 		}
-		noctets=read(descripteur_fifo_serveur_lecture,titre_r,taille_titre*sizeof(char));
+		noctets = read(descripteur_fifo_serveur_lecture,titre_r,taille_titre*sizeof(char));
 		if(noctets != taille_titre*sizeof(char)) {
 			printf("Erreur lors de la lecture du champ titre du FIFO\n");
 			exit(1);

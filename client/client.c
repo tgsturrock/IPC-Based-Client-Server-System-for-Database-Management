@@ -379,9 +379,14 @@ int main(int argc, char *argv[]) {
 
 	int num_titre;
 	int taille_num_titre;
+	//Lab3 comm-HLR05
+	/*Si l'argument -v a été donné par l'utilisateur, le client doit demander à l'utilisateur
+	 *quel titre désire-t-il évaluer dans la liste des résultats reçus du serveur.*/
 	if(get_evaluation(critere)==1){
 		printf("[-] Veuillez choisir un titre a evaluer");
 		scanf("%i",&num_titre);
+		//comm-HLR05 finie
+
 		//Lab3 comm-HLR06
 		/* Le client envoie au serveur le titre à évaluer parmi les résultats reçus. */
 		noctets=write(descripteur_fifo_client_ecriture, &taille_num_titre, sizeof(int));

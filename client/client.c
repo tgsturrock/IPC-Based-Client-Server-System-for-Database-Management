@@ -378,7 +378,6 @@ int main(int argc, char *argv[]) {
 
 
 	int num_titre;
-	int taille_num_titre;
 	//Lab3 comm-HLR05
 	/*Si l'argument -v a été donné par l'utilisateur, le client doit demander à l'utilisateur
 	 *quel titre désire-t-il évaluer dans la liste des résultats reçus du serveur.*/
@@ -389,14 +388,9 @@ int main(int argc, char *argv[]) {
 
 		//Lab3 comm-HLR06
 		/* Le client envoie au serveur le titre à évaluer parmi les résultats reçus. */
-		noctets=write(descripteur_fifo_client_ecriture, &taille_num_titre, sizeof(int));
+		noctets=write(descripteur_fifo_client_ecriture, &num_titre, sizeof(int));
 		if(noctets < sizeof(int)) {
-			printf("Probleme lors de l'ecriture taille du champ genre null dans le FIFO\n");
-			exit(1);
-		}
-		noctets=write(descripteur_fifo_client_ecriture,&num_titre,taille_num_titre*sizeof(char));
-		if(noctets < taille_num_titre*sizeof(char)) {
-			printf("Probleme lors de l'ecriture du champ genre nill dans le FIFO\n");
+			printf("Probleme lors de l'ecriture du numero de titre dans le FIFO\n");
 			exit(1);
 		}
 	}

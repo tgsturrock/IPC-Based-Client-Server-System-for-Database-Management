@@ -52,6 +52,7 @@ int main(int argc, char *argv[]) {
 	int BUFFSIZE;
 	int flag;
 	int num_titre;
+	int taille_cote;
 
 	/* Lab3 Tube-HLR02
 	 * Ouverture des fifos, connection avec le client puis

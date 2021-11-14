@@ -433,16 +433,16 @@ int main(int argc, char *argv[]) {
 
 		noctets = read(descripteur_fifo_serveur_lecture, &nb_vote_eval, sizeof(int));
 		if(noctets != sizeof(int)) {
-			printf("Erreur lors de la lecture du no;bre de vote du FIFO\n");
+			printf("Erreur lors de la lecture du nombre de vote du FIFO\n");
 			exit(1);
-		}else{
+		}
 		printf("%i\t \n",nb_vote_eval);
 		//comm-HLR09 finie
 		}
 		//Lab 3 comm-HLR10
 		/* On demande la note et on l'envoie au serveur */
 		printf("Quelle note sur 10 donnez-vous ?");
-		scanf ("%i";note);
+		scanf("%i",note);
 		noctets=write(descripteur_fifo_client_ecriture, &note, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la note dans le FIFO\n");

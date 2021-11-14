@@ -175,7 +175,7 @@ void fichier_resultat(t_resultat resultat) {
 	printf("\t[+] %i resultat de titre trouvés\n", resultat->nb_titre);
 	for (int i = 0; i < (resultat->nb_titre); i++) {
 		printf("\t[%d] %s\t%s\t%d\t%s\t%s\t\n",
-				i, resultat->titre[i]->ID,
+				(i+1), resultat->titre[i]->ID,
 				resultat->titre[i]->titre,
 				resultat->titre[i]->annee_parution_min,
 				resultat->titre[i]->categorie,

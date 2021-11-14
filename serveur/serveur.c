@@ -34,7 +34,7 @@
 
 
 int main(int argc, char *argv[]) {
-	char *titre = NULL, *genre = NULL, *categorie = NULL,
+	char *titre = NULL, *genre = NULL, *categorie = NULL, *ID = NULL,
 			*cote = NULL;
 	int descripteur_fifo_client_lecture;
 	int descripteur_fifo_serveur_ecriture;
@@ -49,6 +49,7 @@ int main(int argc, char *argv[]) {
 	int taille_genre;
 	int taille_categorie;
 	int taille_ID;
+	int BUFFSIZE;
 
 	/* Lab3 Tube-HLR02
 	 * Ouverture des fifos, connection avec le client puis
@@ -168,17 +169,20 @@ int main(int argc, char *argv[]) {
 	 * On affiche les valeurs des champs recu par le client.
 	 */
 
-	printf("Réception des criteres de recherche:\n");
-	printf("\tTitre: %s\n", get_titre(critere));
+	printf("[*] Réception des criteres de recherche:\n");
+	printf("\t[+] Titre: %s\n", get_titre(critere));
 	if (get_genre(critere) != NULL){
-		printf("\tGenre: %s\n", get_genre(critere));
+		printf("\t[+] Genre: %s\n", get_genre(critere));
 	}
 	if (get_categorie(critere)!= NULL){
-		printf("\tCategorie: %s\n", get_categorie(critere));
+		printf("\t[+] Categorie: %s\n", get_categorie(critere));
 	}
-	if (annee_parution_min != 0 && annee_parution_max != 0){
-		printf("\tAnnee_min: %i\n", get_annee_parution_min(critere));
-		printf("\tAnnee_max: %i\n", get_annee_parution_max(critere));
+	if(annee_parution_min == annee_parution_max && annee_parution_min != 0 && annee_parution_max != 0){
+		printf("\t[+] Annee de parution: %i\n", get_annee_parution_min(critere));
+	}
+	else if (annee_parution_min != 0 && annee_parution_max != 0){
+		printf("\t[+] Annee_min: %i\n", get_annee_parution_min(critere));
+		printf("\t[+] Annee_max: %i\n", get_annee_parution_max(critere));
 	}
 
 	/* Tube-HLR03 finie */
@@ -198,7 +202,7 @@ int main(int argc, char *argv[]) {
 
 
 	//Lab3 Tube-HLR04
-	/* Le serveur envois les resultats de la recherche au client */
+	/* Le serveur envois les resultats de la recherche au client*/
 	int nb_titre = 0;
 	nb_titre = get_nb_titre(resultat);
 
@@ -210,25 +214,25 @@ int main(int argc, char *argv[]) {
 	}
 
 	t_titre titre_resultat = cree_titre();
-	int taille_categorie_r;
+	printf("[*] Envoi des resultats\n");
 
 	for(int i =0 ;i<nb_titre;i++){
 
 		titre_resultat = get_titre_r(resultat, i);
-		titre_resultat = print_titre(resultat,i);
 
-		//On envoit la taille du champ ID et le champ ID au client
+		//On envoit le champ ID et sa taille au client
 		taille_ID = strlen(get_ID_t(titre_resultat))+1;
 		noctets = write(descripteur_fifo_serveur_ecriture, &taille_ID, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la taille du champ ID dans le FIFO\n");
 			exit(1);
 		}
-		noctets = write(descripteur_fifo_serveur_ecriture,get_ID_t(titre_resultat),taille_titre*sizeof(char));
+		noctets = write(descripteur_fifo_serveur_ecriture,get_ID_t(titre_resultat),taille_ID*sizeof(char));
 		if(noctets < taille_ID*sizeof(char)) {
 			printf("Probleme lors de l'ecriture du champ ID dans le FIFO\n");
 			exit(1);
 		}
+
 
 		//On envoit la taille du champ categorie et le champ categorie au client
 		taille_categorie=strlen(get_categorie_t(titre_resultat))+1;
@@ -262,6 +266,7 @@ int main(int argc, char *argv[]) {
 			printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
 			exit(1);
 		}
+
 		//On envoit la taille du champ genre et le champ genre au client
 		taille_genre=strlen(get_genre_t(titre_resultat))+1;
 		noctets = write(descripteur_fifo_serveur_ecriture, &taille_genre, sizeof(int));
@@ -274,7 +279,6 @@ int main(int argc, char *argv[]) {
 			printf("Probleme lors de l'ecriture du champ genre dans le FIFO\n");
 			exit(1);
 		}
-
 	}
 	//Tube-HLR04 finie
 /*
@@ -310,7 +314,8 @@ int main(int argc, char *argv[]) {
 	detruire_resultat(resultat);
 	detruire_critere(critere);
 
-
+	close(descripteur_fifo_serveur_ecriture);
+	close(descripteur_fifo_client_lecture);
 	return 0;
 	}
 //HLR26 finie

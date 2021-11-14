@@ -45,9 +45,9 @@ int main(int argc, char *argv[]) {
 	int taille_titre;
 	int taille_genre;
 	int taille_categorie;
-	int nb_titre_resultat;
-	int taille_ID;
 
+	char *titreR = NULL, *genreR = NULL, *categorieR = NULL, *IDr = NULL;
+	int annee_parution_min_r=-1, taille_ID, taille_categorieR, taille_titreR, taille_genreR, nb_titre;
 
 	//Lab3 client-HLR02
 	/*
@@ -250,7 +250,7 @@ int main(int argc, char *argv[]) {
 	}
 	/* Tube-HLR01 finie */
 
-	/* Tube-HLR03 : On verifie le fonctionnement on affichant les champs du critere envoyer par le client*/
+	/*Lab3 Tube-HLR03 : On verifie le fonctionnement on affichant les champs du critere envoyer par le client*/
 	printf("[*] Envoi des criteres de recherche:\n");
 	printf("\t[+] Titre: %s\n", get_titre(critere));
 	if (genre != null){
@@ -267,109 +267,109 @@ int main(int argc, char *argv[]) {
 
 	detruire_critere(critere);
 
-	/* Tube-HLR04: reception des resultats envoyer par le serveur puis on les affiche */
+	//Lab3 Tube-HLR04
+	/*reception des resultats envoyer par le serveur puis on les affiche */
 	printf("[*] Reception des resultats\n");
 	//On fait la lecture du nombre de resultats reçus
-	noctets = read(descripteur_fifo_serveur_lecture, &nb_titre_resultat, sizeof(int));
+	noctets = read(descripteur_fifo_serveur_lecture, &nb_titre, sizeof(int));
 	if(noctets != sizeof(int)) {
 		printf("Erreur lors de la lecture du nombre de titres venant du serveur\n");
 		exit(1);
 	}
 	//On affiche le nombre de résultats reçus
-	printf("\t[+] %d résultats reçus\n ", nb_titre_resultat);
+	printf("\t[+] %d résultats reçus\n ", nb_titre);
 
 	int i=0;//variable servant comme compteur
 	/*
 	 * Pour chaque resultats reçus on affiche ses champs a l'usager
 	 */
-
-	char *titre_r = NULL, *genre_r = NULL, *categorie_r = NULL, *ID_r = NULL;
-	int annee_parution_min_r=-1;
-
-	while(i<nb_titre_resultat){
-
+	while(i<nb_titre){
 
 		printf("\t[%i] ",i+1);
 
 		//Lecture et affichage du champ ID
-		noctets = read(descripteur_fifo_serveur_lecture, &taille_ID, sizeof(int));
+		noctets=read(descripteur_fifo_serveur_lecture, &taille_genre, sizeof(int));
 		if(noctets == sizeof(int)) {
-			ID_r = malloc(taille_ID*sizeof(char));
+			IDr= malloc(taille_genre*sizeof(char));
 		}
 		else {
 			printf("Erreur lors de la lecture de la taille du champ ID du FIFO\n");
 			exit(1);
 		}
-		noctets = read(descripteur_fifo_serveur_lecture,ID_r,taille_ID*sizeof(char));
-		if(noctets != taille_ID*sizeof(char)) {
+		noctets=read(descripteur_fifo_serveur_lecture, IDr,taille_genre*sizeof(char));
+		if(noctets != taille_genre*sizeof(char)) {
 			printf("Erreur lors de la lecture du champ ID du FIFO\n");
 			exit(1);
 		}
-		printf("%s\t",ID_r);
+		printf("%s\t",IDr);
 
 		//Lecture et affichage du champ categorie
-		noctets = read(descripteur_fifo_serveur_lecture, &taille_categorie, sizeof(int));
+		noctets = read(descripteur_fifo_serveur_lecture, &taille_categorieR, sizeof(int));
 		if(noctets == sizeof(int)) {
-			categorie_r = malloc(taille_categorie*sizeof(char));
+			categorieR = malloc(taille_categorieR*sizeof(char));
 		}
 		else {
 			printf("Erreur lors de la lecture de la taille du champ categorie du FIFO\n");
 			exit(1);
 		}
-		noctets = read(descripteur_fifo_serveur_lecture,categorie_r,taille_categorie*sizeof(char));
-		if(noctets != taille_categorie*sizeof(char)) {
+		noctets = read(descripteur_fifo_serveur_lecture, categorieR ,taille_categorieR*sizeof(char));
+		if(noctets != taille_categorieR*sizeof(char)) {
 			printf("Erreur lors de la lecture du champ categorie du FIFO\n");
 			exit(1);
 		}
-		printf("%s\t",categorie_r);
+		printf("%s\t",categorieR);
 
 		//Lecture et affichage du champ titre
-		noctets = read(descripteur_fifo_serveur_lecture, &taille_titre, sizeof(int));
+		noctets = read(descripteur_fifo_serveur_lecture, &taille_titreR, sizeof(int));
 		if(noctets == sizeof(int)) {
-			titre_r = malloc(taille_titre*sizeof(char));
+			titreR = malloc(taille_titreR*sizeof(char));
 		}
 		else {
 			printf("Erreur lors de la lecture de la taille du champ titre du FIFO\n");
 			exit(1);
 		}
-		noctets = read(descripteur_fifo_serveur_lecture,titre_r,taille_titre*sizeof(char));
-		if(noctets != taille_titre*sizeof(char)) {
+		noctets = read(descripteur_fifo_serveur_lecture,titreR,taille_titreR*sizeof(char));
+		if(noctets != taille_titreR*sizeof(char)) {
 			printf("Erreur lors de la lecture du champ titre du FIFO\n");
 			exit(1);
 		}
-		printf("%s\t",titre_r);
+		printf("%s\t",titreR);
 
 		//Lecture et affichage de l'annee de parution
-		noctets=read(descripteur_fifo_serveur_lecture, &annee_parution_min_r, sizeof(int));
+		noctets = read(descripteur_fifo_serveur_lecture, &annee_parution_min_r, sizeof(int));
 		if(noctets != sizeof(int)) {
 			printf("Erreur lors de la lecture de l'annee de parution du FIFO\n");
 			exit(1);
-		}
+		}else{
 		printf("%i\t",annee_parution_min_r);
-
+		}
 		//Lecture et affichage du champ genre
-		noctets=read(descripteur_fifo_serveur_lecture, &taille_genre, sizeof(int));
+		noctets=read(descripteur_fifo_serveur_lecture, &taille_genreR, sizeof(int));
 		if(noctets == sizeof(int)) {
-			genre_r = malloc(taille_genre*sizeof(char));
+			genreR = malloc(taille_genreR*sizeof(char));
 		}
 		else {
-			printf("Erreur lors de la lecture du FIFO\n");
+			printf("Erreur lors de la lecture de la taille du champ genre du FIFO\n");
 			exit(1);
 		}
-		noctets=read(descripteur_fifo_serveur_lecture,genre_r,taille_genre*sizeof(char));
-		if(noctets != taille_genre*sizeof(char)) {
-			printf("Erreur lors de la lecture du FIFO\n");
+		noctets=read(descripteur_fifo_serveur_lecture, genreR,taille_genreR*sizeof(char));
+		if(noctets != taille_genreR*sizeof(char)) {
+			printf("Erreur lors de la lecture du champ genre du FIFO\n");
 			exit(1);
 		}
-		printf("%s\n",genre_r);
-		free(ID_r);
-		free(categorie_r);
-		free(titre_r);
-		free(genre_r);
+		printf("%s\n",genreR);
+
+
+		free(IDr);
+		free(categorieR);
+		free(titreR);
+		free(genreR);
 		i++;
 	}
-    /* Tube-HLR05 et HLR06 finie */
+    /* Tube-HLR04*/
 
+	close(descripteur_fifo_client_ecriture);
+	close(descripteur_fifo_serveur_lecture);
     return 0;
 }
 //HLR26 finie

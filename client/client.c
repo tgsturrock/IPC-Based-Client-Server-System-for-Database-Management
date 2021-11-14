@@ -46,10 +46,8 @@ int main(int argc, char *argv[]) {
 	int taille_genre;
 	int taille_categorie;
 	int nb_titre_resultat;
-	int taille_ID_r;
-	int taille_titre_r;
-	int taille_genre_r;
-	int taille_categorie_r;
+	int taille_ID;
+
 
 	//Lab3 client-HLR02
 	/*
@@ -133,11 +131,12 @@ int main(int argc, char *argv[]) {
 
 
 	/*Lab3 Tube-HLR01 On envoi les criteres de recherche en les ecrivant dans un FIFO*/
+
 	//Ouverture des fifos pour communiquer avec le serveur
 	descripteur_fifo_client_ecriture = open(FIFO_CLIENT_ECRITURE,O_WRONLY);
 	descripteur_fifo_serveur_lecture = open(FIFO_SERVEUR_LECTURE, O_RDONLY);
 	//On indique que la connection a ete etablie avec le serveur
-	printf("Connection etablie avec le serveur.\n");
+	printf("[*] Connection etablie avec le serveur.\n");
 
 	//On envois le champ titre et sa taille au serveur
 	taille_titre=strlen(get_titre(critere))+1;
@@ -252,23 +251,24 @@ int main(int argc, char *argv[]) {
 	/* Tube-HLR01 finie */
 
 	/* Tube-HLR03 : On verifie le fonctionnement on affichant les champs du critere envoyer par le client*/
-	printf("Nous avons transmis l'information suivante:\n");
-	printf("Titre: %s\n", get_titre(critere));
+	printf("[*] Envoi des criteres de recherche:\n");
+	printf("\t[+] Titre: %s\n", get_titre(critere));
 	if (genre != null){
-		printf("Genre: %s\n", get_genre(critere));
+		printf("\t[+] Genre: %s\n", get_genre(critere));
 	}
 	if (categorie != null){
-		printf("Categorie: %s\n", get_categorie(critere));
+		printf("\t[+] Categorie: %s\n", get_categorie(critere));
 	}
 	if (annees){
-		printf("Annee_min: %i\n", get_annee_parution_min(critere));
-		printf("Annee_max: %i\n", get_annee_parution_max(critere));
+		printf("\t[+] Annee_min: %i\n", get_annee_parution_min(critere));
+		printf("\t[+] Annee_max: %i\n", get_annee_parution_max(critere));
 	}
 	/* Tube-HLR03 finie */
 
 	detruire_critere(critere);
 
 	/* Tube-HLR04: reception des resultats envoyer par le serveur puis on les affiche */
+	printf("[*] Reception des resultats\n");
 	//On fait la lecture du nombre de resultats reçus
 	noctets = read(descripteur_fifo_serveur_lecture, &nb_titre_resultat, sizeof(int));
 	if(noctets != sizeof(int)) {
@@ -276,61 +276,64 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	//On affiche le nombre de résultats reçus
-	printf("\t%d résultats reçus\n ");
+	printf("\t[+] %d résultats reçus\n ", nb_titre_resultat);
 
 	int i=0;//variable servant comme compteur
 	/*
 	 * Pour chaque resultats reçus on affiche ses champs a l'usager
 	 */
+
+	char *titre_r = NULL, *genre_r = NULL, *categorie_r = NULL, *ID_r = NULL;
+	int annee_parution_min_r=-1;
+
 	while(i<nb_titre_resultat){
-		char *titre_r = NULL, *genre_r = NULL, *categorie_r = NULL, *ID_r = NULL;
-		int annee_parution_min_r=-1;
+
 
 		printf("\t[%i] ",i+1);
 
 		//Lecture et affichage du champ ID
-		noctets=read(descripteur_fifo_serveur_lecture, &taille_ID_r, sizeof(int));
+		noctets=read(descripteur_fifo_serveur_lecture, &taille_ID, sizeof(int));
 		if(noctets == sizeof(int)) {
-			ID_r = malloc(taille_ID_r*sizeof(char));
+			ID_r = malloc(taille_ID*sizeof(char));
 		}
 		else {
 			printf("Erreur lors de la lecture de la taille du champ ID du FIFO\n");
 			exit(1);
 		}
-		noctets=read(descripteur_fifo_serveur_lecture,ID_r,taille_ID_r*sizeof(char));
-		if(noctets != taille_ID_r*sizeof(char)) {
+		noctets=read(descripteur_fifo_serveur_lecture,ID_r,taille_ID*sizeof(char));
+		if(noctets != taille_ID*sizeof(char)) {
 			printf("Erreur lors de la lecture du champ ID du FIFO\n");
 			exit(1);
 		}
 		printf("%s\t",ID_r);
 
 		//Lecture et affichage du champ categorie
-		noctets=read(descripteur_fifo_serveur_lecture, &taille_categorie_r, sizeof(int));
+		noctets=read(descripteur_fifo_serveur_lecture, &taille_categorie, sizeof(int));
 		if(noctets == sizeof(int)) {
-			categorie_r = malloc(taille_categorie_r*sizeof(char));
+			categorie_r = malloc(taille_categorie*sizeof(char));
 		}
 		else {
 			printf("Erreur lors de la lecture de la taille du champ categorie du FIFO\n");
 			exit(1);
 		}
-		noctets=read(descripteur_fifo_serveur_lecture,categorie_r,taille_categorie_r*sizeof(char));
-		if(noctets != taille_categorie_r*sizeof(char)) {
+		noctets=read(descripteur_fifo_serveur_lecture,categorie_r,taille_categorie*sizeof(char));
+		if(noctets != taille_categorie*sizeof(char)) {
 			printf("Erreur lors de la lecture du champ categorie du FIFO\n");
 			exit(1);
 		}
 		printf("%s\t",categorie_r);
 
 		//Lecture et affichage du champ titre
-		noctets=read(descripteur_fifo_serveur_lecture, &taille_titre_r, sizeof(int));
+		noctets=read(descripteur_fifo_serveur_lecture, &taille_titre, sizeof(int));
 		if(noctets == sizeof(int)) {
-			titre_r = malloc(taille_titre_r*sizeof(char));
+			titre_r = malloc(taille_titre*sizeof(char));
 		}
 		else {
 			printf("Erreur lors de la lecture de la taille du champ titre du FIFO\n");
 			exit(1);
 		}
-		noctets=read(descripteur_fifo_serveur_lecture,titre_r,taille_titre_r*sizeof(char));
-		if(noctets != taille_titre_r*sizeof(char)) {
+		noctets=read(descripteur_fifo_serveur_lecture,titre_r,taille_titre*sizeof(char));
+		if(noctets != taille_titre*sizeof(char)) {
 			printf("Erreur lors de la lecture du champ titre du FIFO\n");
 			exit(1);
 		}
@@ -345,20 +348,24 @@ int main(int argc, char *argv[]) {
 		printf("%i\t",annee_parution_min_r);
 
 		//Lecture et affichage du champ genre
-		noctets=read(descripteur_fifo_serveur_lecture, &taille_genre_r, sizeof(int));
+		noctets=read(descripteur_fifo_serveur_lecture, &taille_genre, sizeof(int));
 		if(noctets == sizeof(int)) {
-			genre_r = malloc(taille_genre_r*sizeof(char));
+			genre_r = malloc(taille_genre*sizeof(char));
 		}
 		else {
 			printf("Erreur lors de la lecture du FIFO\n");
 			exit(1);
 		}
-		noctets=read(descripteur_fifo_serveur_lecture,genre_r,taille_genre_r*sizeof(char));
-		if(noctets != taille_genre_r*sizeof(char)) {
+		noctets=read(descripteur_fifo_serveur_lecture,genre_r,taille_genre*sizeof(char));
+		if(noctets != taille_genre*sizeof(char)) {
 			printf("Erreur lors de la lecture du FIFO\n");
 			exit(1);
 		}
 		printf("%s\n",genre_r);
+		free(ID_r);
+		free(categorie_r);
+		free(titre_r);
+		free(genre_r);
 		i++;
 	}
     /* Tube-HLR05 et HLR06 finie */

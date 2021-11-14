@@ -48,12 +48,12 @@ int main(int argc, char *argv[]) {
 	int taille_titre;
 	int taille_genre;
 	int taille_categorie;
-
+	int taille_ID;
 
 	/* Lab3 Tube-HLR02
 	 * Ouverture des fifos, connection avec le client puis
 	 * Reception du critere de recherche cote serveur */
-	printf("Démarrage du serveurs\n");
+	printf("[*] Démarrage du serveurs\n");
 
 	unlink(FIFO_SERVEUR_ECRITURE);
 	unlink(FIFO_CLIENT_LECTURE);
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
 	}
 	else{
 		//Si tout fonctionne on attend la connexion avec le client
-		printf("En attente d'une connexion avec le clients...\n");
+		printf("[*] En attente d'une connexion avec le clients...\n\n");
 	}
 
 	//Ouverture des fifos du cote serveur
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 	descripteur_fifo_serveur_ecriture = open(FIFO_SERVEUR_ECRITURE, O_WRONLY);
 
 	//On affiche que la connection est etablie
-	printf("Connexion avec le client établie\n");
+	printf("[!] Connexion avec le client établie\n");
 
 	//Lecture du champ titre et de sa taille
 	noctets = read(descripteur_fifo_client_lecture, &taille_titre, sizeof(int));
@@ -180,23 +180,26 @@ int main(int argc, char *argv[]) {
 		printf("\tAnnee_min: %i\n", get_annee_parution_min(critere));
 		printf("\tAnnee_max: %i\n", get_annee_parution_max(critere));
 	}
+
+	free(titre);
 	/* Tube-HLR03 finie */
 
 	//recherche dans la base de donnee pour des titre qui concorde avec les criteres de recherche
+	printf("[*] Exploration de la base de donnees");
 	t_resultat resultat = lecture(critere);
-
+	detruire_critere(critere);
 	//Ajout des cotes de moyenne et nombre de vote aux resultats
 	lecture_cote(resultat);
 	//Lab2-HLR24 finie
 
 	//Affichage des resultats cote serveur
+	printf("[*] Visualisation des résultats\n");
 	fichier_resultat(resultat);
 	//HLR25 finie
 
 
 	//Lab3 Tube-HLR04
 	/* Le serveur envois les resultats de la recherche au client */
-
 	int nb_titre = 0;
 	nb_titre = get_nb_titre(resultat);
 
@@ -207,76 +210,74 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	int taille_resultat_titre;
-	int taille_resultat_genre;
-	int taille_resultat_categorie;
-	int taille_resultat_ID;
 	t_titre titre_resultat = cree_titre();
+	int taille_categorie_r;
+	for(int i =0 ;i<nb_titre;i++){
 
-	/*for(int i =0 ;i<get_nb_titre(resultat);i++){
-
-		titre_resultat = get_titre_r(resultat, 1);
+		titre_resultat = get_titre_r(resultat, i);
+		titre_resultat = print_titre(resultat,i);
 
 		//On envoit la taille du champ ID et le champ ID au client
-		taille_resultat_ID = strlen(get_ID_t(titre_resultat))+1;
-		noctets=write(descripteur_fifo_serveur_ecriture, &taille_resultat_ID, sizeof(int));
+		taille_ID = strlen(get_ID_t(titre_resultat))+1;
+		noctets = write(descripteur_fifo_serveur_ecriture, &taille_ID, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la taille du champ ID dans le FIFO\n");
 			exit(1);
 		}
-		noctets=write(descripteur_fifo_serveur_ecriture,get_ID_t(titre_resultat),taille_titre*sizeof(char));
-		if(noctets < taille_titre*sizeof(char)) {
+		noctets = write(descripteur_fifo_serveur_ecriture,get_ID_t(titre_resultat),taille_titre*sizeof(char));
+		if(noctets < taille_ID*sizeof(char)) {
 			printf("Probleme lors de l'ecriture du champ ID dans le FIFO\n");
 			exit(1);
 		}
+
 		//On envoit la taille du champ categorie et le champ categorie au client
-		taille_resultat_categorie=strlen(get_categorie_t(titre_resultat))+1;
-		noctets=write(descripteur_fifo_serveur_ecriture, &taille_resultat_categorie, sizeof(int));
+		taille_categorie=strlen(get_categorie_t(titre_resultat))+1;
+		noctets = write(descripteur_fifo_serveur_ecriture, &taille_categorie, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la taille de la categorie dans le FIFO\n");
 			exit(1);
 		}
-		noctets=write(descripteur_fifo_serveur_ecriture,get_categorie_t(titre_resultat),taille_categorie*sizeof(char));
+		noctets = write(descripteur_fifo_serveur_ecriture, get_categorie_t(titre_resultat),taille_categorie*sizeof(char));
 		if(noctets < taille_categorie*sizeof(char)) {
 			printf("Probleme lors de l'ecriture du champ categorie dans le FIFO\n");
 			exit(1);
 		}
+
 		//On envoit la taille du champ titre et le champ titre au client
-		taille_resultat_titre=strlen(get_titre_t(titre_resultat))+1;
-		noctets=write(descripteur_fifo_serveur_ecriture, &taille_resultat_titre, sizeof(int));
+		taille_titre = strlen(get_titre_t(titre_resultat))+1;
+		noctets = write(descripteur_fifo_serveur_ecriture, &taille_titre, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la taille du champ titre dans le FIFO\n");
 			exit(1);
 		}
-		noctets=write(descripteur_fifo_serveur_ecriture,get_titre_t(titre_resultat),taille_titre*sizeof(char));
+		noctets = write(descripteur_fifo_serveur_ecriture,get_titre_t(titre_resultat),taille_titre*sizeof(char));
 		if(noctets < taille_titre*sizeof(char)) {
 			printf("Probleme lors de l'ecriture du champ titre dans le FIFO\n");
 			exit(1);
 		}
 		//On envoit l'annee de parution du film
 		annee_parution_min = get_annee_parution_min_t(titre_resultat);
-		noctets=write(descripteur_fifo_serveur_ecriture, &annee_parution_min , sizeof(int));
+		noctets = write(descripteur_fifo_serveur_ecriture, &annee_parution_min , sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
 			exit(1);
 		}
 		//On envoit la taille du champ genre et le champ genre au client
-		taille_resultat_genre=strlen(get_genre_t(titre_resultat))+1;
-		noctets=write(descripteur_fifo_serveur_ecriture, &taille_resultat_genre, sizeof(int));
+		taille_genre=strlen(get_genre_t(titre_resultat))+1;
+		noctets = write(descripteur_fifo_serveur_ecriture, &taille_genre, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la taille du champ genre dans le FIFO\n");
 			exit(1);
 		}
-		noctets=write(descripteur_fifo_serveur_ecriture,get_genre_t(titre_resultat),taille_genre*sizeof(char));
+		noctets = write(descripteur_fifo_serveur_ecriture,get_genre_t(titre_resultat),taille_genre*sizeof(char));
 		if(noctets < taille_genre*sizeof(char)) {
 			printf("Probleme lors de l'ecriture du champ genre dans le FIFO\n");
 			exit(1);
 		}
-		//i++;
 
 	}
 	//Tube-HLR04 finie
-
+/*
 	int note;
 	t_titre titre_chercher = cree_titre();
 
@@ -294,7 +295,7 @@ int main(int argc, char *argv[]) {
 
 	fichier_cote(titre_chercher, note);
 
-
+*/
 
 	//Lab2-HLR26
 	/*
@@ -311,7 +312,7 @@ int main(int argc, char *argv[]) {
 
 
 	return 0;
-}
+	}
 //HLR26 finie
 
 //HLR26 finie

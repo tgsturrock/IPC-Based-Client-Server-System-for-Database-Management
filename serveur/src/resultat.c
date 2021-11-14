@@ -168,38 +168,13 @@ t_titre print_titre(t_resultat resultat, int i) {
 }
 void fichier_resultat(t_resultat resultat) {
 
-	//cree le fichier a ecrire dedans puis on l'ouvre
-	FILE *fichier_resultat = fopen("resultat.tsv", "w");
-
-	//Regarde si le fichier est cree
-	if (fichier_resultat == NULL) {
-		printf("Impossible de cree le fichier resultat");
-		return;
-	}
-
-	/*Pour chaque titre contenu dans la structure resultat on ecrit le contenue de la
-	 structrure titre sur une ligne. Chaque champ de la structure titre
-	 est separe par une tabulation.*/
-
-	for (int i = 0; i < (resultat->nb_titre); i++) {
-		fprintf(fichier_resultat, "%s\t%s\t%d\t%s\t%s\t\n",
-				resultat->titre[i]->ID,
-				resultat->titre[i]->titre,
-				resultat->titre[i]->annee_parution_min,
-				resultat->titre[i]->categorie,
-				resultat->titre[i]->genre);
-	}
-	//On ferme le fichier une fois que les titre ont ete ajoutes
-	fclose(fichier_resultat); //Lab3-HLR03 finie
-
 	//Lab3 serveur-HLR02
 	/*On affiche dans le terminal les resultats de la recherche
 	 * au lieu de les ecrire dans un fichier txt
 	 */
-	printf("Visualisation des résultats\n");
-	printf("\t %i resultat de titre trouvés\n", resultat->nb_titre);
+	printf("\t[+] %i resultat de titre trouvés\n", resultat->nb_titre);
 	for (int i = 0; i < (resultat->nb_titre); i++) {
-		printf("\t[%d] - %s\t%s\t%d\t%s\t%s\t\n",
+		printf("\t[%d] %s\t%s\t%d\t%s\t%s\t\n",
 				i, resultat->titre[i]->ID,
 				resultat->titre[i]->titre,
 				resultat->titre[i]->annee_parution_min,

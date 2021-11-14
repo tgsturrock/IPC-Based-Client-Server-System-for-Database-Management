@@ -128,7 +128,8 @@ int main(int argc, char *argv[]) {
 	else{
 		set_intervalle_annees(critere, null);
 	}
-
+	if(flag == 1)
+		set_evaluation(critere, flag);
 
 	/*Lab3 Tube-HLR01 On envoi les criteres de recherche en les ecrivant dans un FIFO*/
 	//Ouverture des fifos pour communiquer avec le serveur
@@ -375,13 +376,26 @@ int main(int argc, char *argv[]) {
     // Tube-HLR04 finie
 	// comm-HLR04 finie
 
-	// comm-HLR05 : On demande le titre a evaluer
+
 	int num_titre;
-	if (get_evaluation(critere)==1){
+	int taille_num_titre;
+	if(get_evaluation(critere)==1){
 		printf("[-] Veuillez choisir un titre a evaluer");
 		scanf("%i",&num_titre);
+		//Lab3 comm-HLR06
+		/* Le client envoie au serveur le titre à évaluer parmi les résultats reçus. */
+		noctets=write(descripteur_fifo_client_ecriture, &taille_num_titre, sizeof(int));
+		if(noctets < sizeof(int)) {
+			printf("Probleme lors de l'ecriture taille du champ genre null dans le FIFO\n");
+			exit(1);
+		}
+		noctets=write(descripteur_fifo_client_ecriture,&num_titre,taille_num_titre*sizeof(char));
+		if(noctets < taille_num_titre*sizeof(char)) {
+			printf("Probleme lors de l'ecriture du champ genre nill dans le FIFO\n");
+			exit(1);
+		}
 	}
-	// comm-HLR05 finie
+	//comm-HLR06 finie
 
 	close(descripteur_fifo_client_ecriture);
 	close(descripteur_fifo_serveur_lecture);

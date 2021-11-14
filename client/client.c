@@ -33,7 +33,7 @@
 
 
 int main(int argc, char *argv[]) {
-	char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL, *note = NULL;
+	char *titre = NULL, *genre = NULL, *annees = NULL, *categorie = NULL;
 	int descripteur_fifo_client_ecriture;
 	int descripteur_fifo_serveur_lecture;
 	int noctets=0;

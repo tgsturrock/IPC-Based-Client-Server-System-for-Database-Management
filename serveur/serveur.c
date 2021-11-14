@@ -219,7 +219,8 @@ int main(int argc, char *argv[]) {
 
 	t_titre titre_resultat = cree_titre();
 	printf("[*] Envoi des resultats\n");
-
+	//Lab3 comm-HLR03
+	/*Le serveur retourne les resultats de titres d'une recherche vers le client*/
 	for(int i =0 ;i<nb_titre;i++){
 
 		titre_resultat = get_titre_r(resultat, i);
@@ -285,6 +286,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	//Tube-HLR04 finie
+	//comm-HLR03 finie
 /*
 	int note;
 	t_titre titre_chercher = cree_titre();
@@ -320,6 +322,8 @@ int main(int argc, char *argv[]) {
 
 	close(descripteur_fifo_serveur_ecriture);
 	close(descripteur_fifo_client_lecture);
+	unlink(FIFO_SERVEUR_ECRITURE);
+	unlink(FIFO_CLIENT_LECTURE);
 	return 0;
 	}
 //HLR26 finie

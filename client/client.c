@@ -383,6 +383,7 @@ int main(int argc, char *argv[]) {
 	int taille_cote_eval;
 	char* cote_eval;
 	int nb_vote_eval;
+	int note;
 	//Lab3 comm-HLR05
 	/*Si l'argument -v a été donné par l'utilisateur, le client doit demander à l'utilisateur
 	 *quel titre désire-t-il évaluer dans la liste des résultats reçus du serveur.*/
@@ -438,6 +439,16 @@ int main(int argc, char *argv[]) {
 		printf("%i\t \n",nb_vote_eval);
 		//comm-HLR09 finie
 		}
+		//Lab 3 comm-HLR10
+		/* On demande la note et on l'envoie au serveur */
+		printf("Quelle note sur 10 donnez-vous ?");
+		scanf ("%i";note);
+		noctets=write(descripteur_fifo_client_ecriture, &note, sizeof(int));
+		if(noctets < sizeof(int)) {
+			printf("Probleme lors de l'ecriture de la note dans le FIFO\n");
+			exit(1);
+		}
+	   //comm-HLR10 finie
 	}
 	//comm-HLR06 finie
 

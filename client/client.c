@@ -390,6 +390,9 @@ int main(int argc, char *argv[]) {
 	char* cote_eval;
 	int nb_vote_eval;
 	int note;
+	int taille_nouvelle_cote;
+	char* nouvelle_cote;
+	int nouveau_nb_vote;
 	//Lab3 comm-HLR05
 	/*Si l'argument -v a été donné par l'utilisateur, le client doit demander à l'utilisateur
 	 *quel titre désire-t-il évaluer dans la liste des résultats reçus du serveur.*/
@@ -454,7 +457,33 @@ int main(int argc, char *argv[]) {
 			printf("Probleme lors de l'ecriture de la note dans le FIFO\n");
 			exit(1);
 		}
-	   //comm-HLR10 finie
+	    //comm-HLR10 finie
+	    //Lab 3 comm-HLR13
+		/* On recoit et affiche les nouvelles informations*/
+		printf("%s\n",ID_eval);
+		noctets=read(descripteur_fifo_serveur_lecture,&taille_nouvelle_cote,sizeof(int));
+		if(noctets == sizeof(int)) {
+			cote_eval = malloc(taille_nouvelle_cote*sizeof(char));
+		}
+		else {
+			printf("Erreur lors de la lecture de la taille du champ cote du FIFO\n");
+			exit(1);
+		}
+		noctets=read(descripteur_fifo_serveur_lecture, nouvelle_cote,taille_nouvelle_cote*sizeof(char));
+		if(noctets != taille_nouvelle_cote*sizeof(char)) {
+			printf("Erreur lors de la lecture du champ cote du FIFO\n");
+			exit(1);
+		}
+		printf("%s /10 \n",nouvelle_cote);
+
+		noctets = read(descripteur_fifo_serveur_lecture, &nouveau_nb_vote, sizeof(int));
+		if(noctets != sizeof(int)) {
+			printf("Erreur lors de la lecture du nombre de vote du FIFO\n");
+			exit(1);
+		}
+		printf("%i\t \n",nouveau_nb_vote);
+		//comm-HLR13 finie
+
 	}
 	//comm-HLR06 finie
 

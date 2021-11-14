@@ -131,13 +131,14 @@ int main(int argc, char *argv[]) {
 
 
 	/*Lab3 Tube-HLR01 On envoi les criteres de recherche en les ecrivant dans un FIFO*/
-
 	//Ouverture des fifos pour communiquer avec le serveur
 	descripteur_fifo_client_ecriture = open(FIFO_CLIENT_ECRITURE,O_WRONLY);
 	descripteur_fifo_serveur_lecture = open(FIFO_SERVEUR_LECTURE, O_RDONLY);
 	//On indique que la connection a ete etablie avec le serveur
 	printf("[*] Connection etablie avec le serveur.\n");
 
+	//Lab3 comm-HLR01
+	/*Le client envoie une operation de recherche au serveur ou les criteres sont inclus */
 	//On envois le champ titre et sa taille au serveur
 	taille_titre=strlen(get_titre(critere))+1;
 	noctets=write(descripteur_fifo_client_ecriture, &taille_titre, sizeof(int));
@@ -248,7 +249,8 @@ int main(int argc, char *argv[]) {
 		}
 
 	}
-	/* Tube-HLR01 finie */
+	// Tube-HLR01 finie
+	// Comm-HLR01 finie
 
 	/*Lab3 Tube-HLR03 : On verifie le fonctionnement on affichant les champs du critere envoyer par le client*/
 	printf("[*] Envoi des criteres de recherche:\n");

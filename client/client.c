@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 			break;
 			//Lab3-HLR03
 			/*
-			 * Argument -v qui permet a l'uti;isateur
+			 * Argument -v qui permet a l'utilisateur
 			 * de demander a evaluer un titre
 			 */
 		case 'v':
@@ -374,6 +374,14 @@ int main(int argc, char *argv[]) {
 	}
     // Tube-HLR04 finie
 	// comm-HLR04 finie
+
+	// comm-HLR05 : On demande le titre a evaluer
+	int num_titre;
+	if (get_evaluation(critere)==1){
+		printf("[-] Veuillez choisir un titre a evaluer");
+		scanf("%i",&num_titre);
+	}
+	// comm-HLR05 finie
 
 	close(descripteur_fifo_client_ecriture);
 	close(descripteur_fifo_serveur_lecture);

@@ -86,6 +86,9 @@ int main(int argc, char *argv[]) {
 	//On affiche que la connection est etablie
 	printf("[!] Connexion avec le client établie\n");
 
+	//Lab3 comm-HLR02
+	/* Pour une operation de recherche, le serveur est capable de recupere tous les critere de recherche
+	 * envoyes par le client*/
 	//Lecture du champ titre et de sa taille
 	noctets = read(descripteur_fifo_client_lecture, &taille_titre, sizeof(int));
 	if(noctets == sizeof(int)) {
@@ -142,7 +145,8 @@ int main(int argc, char *argv[]) {
 		printf("Erreur lors de la lecture de l'annee de parution maximum\n");
 		exit(1);
 	}
-	/* Lab3 Tube-HLR02 finie */
+	//Tube-HLR02 finie
+	//comm-HLR02 finie
 
 	// Création de la structure critere et stockage des arguments reçus
 	t_critere critere = creer_critere();

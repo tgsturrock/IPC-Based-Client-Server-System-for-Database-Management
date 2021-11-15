@@ -136,12 +136,9 @@ void add_titre(t_resultat resultat, t_titre titre) {
 			printf("Erreur d'allocation lors de l'ajout d'un titre");
 		}
 		resultat->titre = ptr;
-
-		//resultat->titre[i]= cree_titre();
 		resultat->titre[i] = copy; //rajoute un titre dans le tableau de resultat
 		resultat->nb_titre++; //incremente le nombre de titre
 	} else {
-		//resultat->titre[i] = cree_titre();
 		resultat->titre[i] = copy; //rajoute un titre dans le tableau de resultat
 		resultat->nb_titre++; //incremente le nombre de titre
 	}

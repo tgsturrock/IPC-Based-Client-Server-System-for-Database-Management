@@ -504,7 +504,6 @@ int main(int argc, char *argv[]) {
 	free(ID_eval);
 	free(cote_eval);
 	free(nouvelle_cote);
-	//free(null);
 	close(descripteur_fifo_client_ecriture);
 	close(descripteur_fifo_serveur_lecture);
 

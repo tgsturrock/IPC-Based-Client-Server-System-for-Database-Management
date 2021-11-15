@@ -95,7 +95,7 @@ void set_intervalle_annees(t_critere critere, char *annees) {
  * titre par le client.
  */
 void set_evaluation(t_critere critere, int evaluation){
-	critere->evaluation=evaluation;
+	critere->evaluation = evaluation;
 }
 //client-HLR05 finie
 

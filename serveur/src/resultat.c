@@ -162,7 +162,7 @@ t_titre print_titre(t_resultat resultat, int i) {
 			return resultat->titre[i];
 		}
 	}
-	return 1;
+	return resultat->titre[i];
 }
 void fichier_resultat(t_resultat resultat) {
 
@@ -369,7 +369,7 @@ t_titre get_titre_ID(t_resultat resultat, char* ID) {
 				return resultat->titre[i];
 			}
 		}
-	return 1;
+	return resultat->titre[0];
 }
 int get_nb_titre(t_resultat resultat) {
 	return resultat->nb_titre;

@@ -128,8 +128,9 @@ int main(int argc, char *argv[]) {
 	else{
 		set_intervalle_annees(critere, null);
 	}
-	if(flag == 1)
+	if(flag == 1){
 		set_evaluation(critere, flag);
+	}
 
 	/*Lab3 Tube-HLR01 On envoi les criteres de recherche en les ecrivant dans un FIFO*/
 	//Ouverture des fifos pour communiquer avec le serveur

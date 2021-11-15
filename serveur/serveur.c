@@ -34,7 +34,7 @@
 
 
 int main(int argc, char *argv[]) {
-	char *titre = NULL, *genre = NULL, *categorie = NULL, *ID = NULL;
+	char *titre = NULL, *genre = NULL, *categorie = NULL;
 	int descripteur_fifo_client_lecture;
 	int descripteur_fifo_serveur_ecriture;
 	int noctets=0;
@@ -162,15 +162,12 @@ int main(int argc, char *argv[]) {
 	t_critere critere = creer_critere();
 	//
 	set_titre(critere, titre);
-	if (strcmp(categorie,null)!=0)
-		set_categorie(critere, categorie);
-	else{
-		free(categorie);
-	}
-	if (strcmp(genre,null) != 0)
+
+	if (strcmp(genre,null) != 0){
 		set_genre(critere, genre);
-	else{
-		free(genre);
+	}
+	if (strcmp(categorie,null) != 0){
+		set_categorie(critere, categorie);
 	}
 	if (annee_parution_min != 0){
 		set_annee_parution_min(critere, annee_parution_min);
@@ -422,6 +419,11 @@ int main(int argc, char *argv[]) {
 	//libere la memoire
 	detruire_resultat(resultat);
 	detruire_critere(critere);
+
+
+	free(titre);
+	free(genre);
+	free(categorie);
 
 	close(descripteur_fifo_serveur_ecriture);
 	close(descripteur_fifo_client_lecture);

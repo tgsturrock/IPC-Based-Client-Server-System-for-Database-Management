@@ -54,8 +54,8 @@ void detruire_critere(t_critere critere);
  * critere : la structure à modifier
  * titre : chaine de caractères constituant le titre à ajouter
  */
+void set_evaluation(t_critere critere, int evaluation);
 void set_titre(t_critere critere, char *titre);
-
 /**
  * Mutateur de genre
  *
@@ -117,7 +117,7 @@ void set_intervalle_annees(t_critere critere, char *annees);
  */
 void set_annee_parution_min(t_critere critere, int annee);
 void set_annee_parution_max(t_critere critere, int annee);
-void set_evaluation(t_critere critere, int evaluation);
+
 
 /* OBSERVATEURS DES CRITÈRES */
 

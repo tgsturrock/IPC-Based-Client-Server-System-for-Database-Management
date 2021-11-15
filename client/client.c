@@ -507,7 +507,7 @@ int main(int argc, char *argv[]) {
 
 	close(descripteur_fifo_client_ecriture);
 	close(descripteur_fifo_serveur_lecture);
-
+	printf("[-] Fermeture de l'application.\n");
 	return 0;
 }
 //HLR26 finie

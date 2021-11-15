@@ -429,6 +429,7 @@ int main(int argc, char *argv[]) {
 	close(descripteur_fifo_client_lecture);
 	unlink(FIFO_SERVEUR_ECRITURE);
 	unlink(FIFO_CLIENT_LECTURE);
+	printf("[-] Fermeture du serveur.\n");
 	return 0;
 	}
 //HLR26 finie

@@ -224,22 +224,22 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	t_titre titre_resultat = cree_titre();
+	//t_titre titre_resultat = cree_titre();
 	printf("[*] Envoi des resultats\n");
 	//Lab3 comm-HLR03
 	/*Le serveur retourne les resultats de titres d'une recherche vers le client*/
 	for(int i =0 ;i<nb_titre;i++){
 
-		titre_resultat = get_titre_r(resultat, i);
+		//titre_resultat = get_titre_r(resultat, i);
 
 		//On envoit le champ ID et sa taille au client
-		taille_ID = strlen(get_ID_t(titre_resultat))+1;
+		taille_ID = strlen(get_ID_t(get_titre_r(resultat, i)))+1;
 		noctets = write(descripteur_fifo_serveur_ecriture, &taille_ID, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la taille du champ ID dans le FIFO\n");
 			exit(1);
 		}
-		noctets = write(descripteur_fifo_serveur_ecriture,get_ID_t(titre_resultat),taille_ID*sizeof(char));
+		noctets = write(descripteur_fifo_serveur_ecriture,get_ID_t(get_titre_r(resultat, i)),taille_ID*sizeof(char));
 		if(noctets < taille_ID*sizeof(char)) {
 			printf("Probleme lors de l'ecriture du champ ID dans le FIFO\n");
 			exit(1);
@@ -247,32 +247,32 @@ int main(int argc, char *argv[]) {
 
 
 		//On envoit la taille du champ categorie et le champ categorie au client
-		taille_categorie=strlen(get_categorie_t(titre_resultat))+1;
+		taille_categorie=strlen(get_categorie_t(get_titre_r(resultat, i)))+1;
 		noctets = write(descripteur_fifo_serveur_ecriture, &taille_categorie, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la taille de la categorie dans le FIFO\n");
 			exit(1);
 		}
-		noctets = write(descripteur_fifo_serveur_ecriture, get_categorie_t(titre_resultat),taille_categorie*sizeof(char));
+		noctets = write(descripteur_fifo_serveur_ecriture, get_categorie_t(get_titre_r(resultat, i)),taille_categorie*sizeof(char));
 		if(noctets < taille_categorie*sizeof(char)) {
 			printf("Probleme lors de l'ecriture du champ categorie dans le FIFO\n");
 			exit(1);
 		}
 
 		//On envoit la taille du champ titre et le champ titre au client
-		taille_titre = strlen(get_titre_t(titre_resultat))+1;
+		taille_titre = strlen(get_titre_t(get_titre_r(resultat, i)))+1;
 		noctets = write(descripteur_fifo_serveur_ecriture, &taille_titre, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la taille du champ titre dans le FIFO\n");
 			exit(1);
 		}
-		noctets = write(descripteur_fifo_serveur_ecriture,get_titre_t(titre_resultat),taille_titre*sizeof(char));
+		noctets = write(descripteur_fifo_serveur_ecriture,get_titre_t(get_titre_r(resultat, i)),taille_titre*sizeof(char));
 		if(noctets < taille_titre*sizeof(char)) {
 			printf("Probleme lors de l'ecriture du champ titre dans le FIFO\n");
 			exit(1);
 		}
 		//On envoit l'annee de parution du film
-		annee_parution_min = get_annee_parution_min_t(titre_resultat);
+		annee_parution_min = get_annee_parution_min_t(get_titre_r(resultat, i));
 		noctets = write(descripteur_fifo_serveur_ecriture, &annee_parution_min , sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
@@ -280,13 +280,13 @@ int main(int argc, char *argv[]) {
 		}
 
 		//On envoit la taille du champ genre et le champ genre au client
-		taille_genre=strlen(get_genre_t(titre_resultat))+1;
+		taille_genre=strlen(get_genre_t(get_titre_r(resultat, i)))+1;
 		noctets = write(descripteur_fifo_serveur_ecriture, &taille_genre, sizeof(int));
 		if(noctets < sizeof(int)) {
 			printf("Probleme lors de l'ecriture de la taille du champ genre dans le FIFO\n");
 			exit(1);
 		}
-		noctets = write(descripteur_fifo_serveur_ecriture,get_genre_t(titre_resultat),taille_genre*sizeof(char));
+		noctets = write(descripteur_fifo_serveur_ecriture,get_genre_t(get_titre_r(resultat, i)),taille_genre*sizeof(char));
 		if(noctets < taille_genre*sizeof(char)) {
 			printf("Probleme lors de l'ecriture du champ genre dans le FIFO\n");
 			exit(1);
@@ -307,7 +307,7 @@ int main(int argc, char *argv[]) {
 
 		//Lab3 comm-HLR08
 		/*Le serveur cherche les données de classement du titre à évaluer et les envoie au client.*/
-		t_titre titre_chercher = cree_titre();
+		t_titre titre_chercher;
 		printf("[*] Titre a evaluer:\n");
 		titre_chercher = print_titre(resultat,(num_titre-1));
 
@@ -403,6 +403,7 @@ int main(int argc, char *argv[]) {
 			exit(1);
 		}
 		//comm-HLR12 finie
+
 	}
 	//Tube-HLR04 finie
 	//comm-HLR03 finie
@@ -419,7 +420,6 @@ int main(int argc, char *argv[]) {
 	//libere la memoire
 	detruire_resultat(resultat);
 	detruire_critere(critere);
-
 
 	free(titre);
 	free(genre);

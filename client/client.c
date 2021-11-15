@@ -38,8 +38,8 @@ int main(int argc, char *argv[]) {
 	int descripteur_fifo_serveur_lecture;
 	int noctets=0;
 	int erreur=0;
-	char* null = malloc(2*sizeof(char));
-	null = "0";
+	//char* null = malloc(2*sizeof(char));
+	char null[2] = "0";
 
 
 	int taille_titre;
@@ -499,15 +499,17 @@ int main(int argc, char *argv[]) {
 		}
 		printf("\t- Nouveau nombre de votes: %i \n",nouveau_nb_vote);
 		//comm-HLR13 finie
+		free(ID_eval);
+		free(cote_eval);
+		free(nouvelle_cote);
+
 	}
 	//comm-HLR06 finie
-	free(ID_eval);
-	free(cote_eval);
-	free(nouvelle_cote);
 
 	close(descripteur_fifo_client_ecriture);
 	close(descripteur_fifo_serveur_lecture);
 	printf("[-] Fermeture de l'application.\n");
+
 	return 0;
 }
 //HLR26 finie

@@ -170,6 +170,9 @@ t_resultat lecture(t_critere critere) {
 	 * Les nom de base de donnees sont title_basics.tsv et title_ratings.tsv
 	 */
 	fichier = fopen("data/title_basics.tsv", "r");
+	if(fichier==NULL){
+		printf("Fichier not found");
+	}
 	//HLR23 finie
 
 //HLR10 finie

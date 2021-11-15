@@ -237,7 +237,7 @@ void calcul_moyenne(t_titre titre, float nouvelle_cote) {
 			double note_moyenne = atof(titre->note_moyenne); //On convertie le note moyenne de string en double et on stock la valeur
 
 			//On fait le calcul de la nouvelle moyenne
-			double nouvelle_moyenne = note_moyenne + (nouvelle_cote - note_moyenne) / nb_votes;
+			double nouvelle_moyenne = (nouvelle_cote + note_moyenne*nb_votes) / (nb_votes+1);
 
 			sprintf(titre->note_moyenne,"%.1f",nouvelle_moyenne); //On stock la nouvelle moyenne
 			titre->nombre_votes++; //On incremente le nombre de votes

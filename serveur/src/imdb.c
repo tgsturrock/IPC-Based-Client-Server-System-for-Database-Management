@@ -246,7 +246,7 @@ void lecture_cote(t_resultat resultat) {
  * en copiant chaque ligne du fichier original a l'execption de la ligne
  * a laquelle on doit rajouter une cote.
  */
-void fichier_cote(t_titre titre, int cote) {
+void fichier_cote(t_titre titre, float cote) {
 	int taille_max = 1024;
 	char *ligne = (char*) malloc(taille_max * sizeof(char));
 	int num_ligne = 1;//variable permettant de garder en compte le numero de ligne
@@ -280,6 +280,11 @@ void fichier_cote(t_titre titre, int cote) {
 					get_ID_t(titre),
 					get_moyenne(titre),
 					get_vote(titre));
+			printf("[+] Nouvelles valeurs de cotes\n");
+			printf("\t[+] Titre: %s\n\t[+] Cote: %s\n\t[+] Nombre de vote:%d\n",
+					get_ID_t(titre),
+					get_moyenne(titre),
+					get_vote(titre));
 		}
 		//Serveur-HLR10 finie
 		else if (get_numero_ligne(titre) != num_ligne) {
@@ -306,8 +311,8 @@ void fichier_cote(t_titre titre, int cote) {
 					get_vote(titre));
 			//Serveur-HLR08 finie
 			//Serveur-HLR11 finie
-
-			printf("%s\t%s\t%d\n",
+			printf("[+] Nouvelles valeurs de cotes\n");
+			printf("\t[+] Titre: %s\n\t[+] Cote: %s\n\t[+] Nombre de vote:%d\n",
 					get_ID_t(titre),
 					get_moyenne(titre),
 					get_vote(titre));

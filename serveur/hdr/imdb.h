@@ -16,6 +16,6 @@
 
 t_resultat lecture(t_critere critere);
 void lecture_cote(t_resultat resultat);
-void fichier_cote(t_titre titre, int cote);
+void fichier_cote(t_titre titre, float cote);
 
 #endif

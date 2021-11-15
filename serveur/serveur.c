@@ -34,8 +34,7 @@
 
 
 int main(int argc, char *argv[]) {
-	char *titre = NULL, *genre = NULL, *categorie = NULL, *ID = NULL,
-			*cote = NULL;
+	char *titre = NULL, *genre = NULL, *categorie = NULL, *ID = NULL;
 	int descripteur_fifo_client_lecture;
 	int descripteur_fifo_serveur_ecriture;
 	int noctets=0;
@@ -54,7 +53,7 @@ int main(int argc, char *argv[]) {
 	int num_titre;
 	int taille_cote;
 	int vote;
-	int cote;
+	float cote;
 
 	/* Lab3 Tube-HLR02
 	 * Ouverture des fifos, connection avec le client puis
@@ -296,7 +295,7 @@ int main(int argc, char *argv[]) {
 			exit(1);
 		}
 	}
-	printf("[*] Resultats envoyes \n");
+	printf("[*] Resultats envoyes \n\n");
 
 	//Lab3 comm-HLR07
 	/*Si le champ relié à l'argument -v a bien été reçu lors du requis Comm-HLR02,
@@ -312,7 +311,8 @@ int main(int argc, char *argv[]) {
 		//Lab3 comm-HLR08
 		/*Le serveur cherche les données de classement du titre à évaluer et les envoie au client.*/
 		t_titre titre_chercher = cree_titre();
-		titre_chercher = print_titre(resultat,num_titre);
+		printf("[*] Titre a evaluer:\n");
+		titre_chercher = print_titre(resultat,(num_titre-1));
 
 		//On envoit le champ ID et sa taille au client
 		taille_ID = strlen(get_ID_t(titre_chercher))+1;
@@ -328,35 +328,60 @@ int main(int argc, char *argv[]) {
 		}
 
 		//On envoit le champ cote et sa taille au client
-		taille_cote= strlen(get_moyenne(titre_chercher))+1;
-		noctets = write(descripteur_fifo_serveur_ecriture, &taille_cote, sizeof(int));
-		if(noctets < sizeof(int)) {
-			printf("Probleme lors de l'ecriture de la taille du champ ID dans le FIFO\n");
-			exit(1);
+		if(get_moyenne(titre_chercher)==NULL){
+			taille_cote= strlen(null)+1;
+			noctets = write(descripteur_fifo_serveur_ecriture, &taille_cote, sizeof(int));
+			if(noctets < sizeof(int)) {
+				printf("Probleme lors de l'ecriture de la taille du champ ID dans le FIFO\n");
+				exit(1);
+			}
+			noctets = write(descripteur_fifo_serveur_ecriture,null,taille_cote*sizeof(char));
+			if(noctets < taille_cote*sizeof(char)) {
+				printf("Probleme lors de l'ecriture du champ ID dans le FIFO\n");
+				exit(1);
+			}
 		}
-		noctets = write(descripteur_fifo_serveur_ecriture,get_moyenne(titre_chercher),taille_cote*sizeof(char));
-		if(noctets < taille_cote*sizeof(char)) {
-			printf("Probleme lors de l'ecriture du champ ID dans le FIFO\n");
-			exit(1);
+		else{
+			taille_cote= strlen(get_moyenne(titre_chercher))+1;
+			noctets = write(descripteur_fifo_serveur_ecriture, &taille_cote, sizeof(int));
+			if(noctets < sizeof(int)) {
+				printf("Probleme lors de l'ecriture de la taille du champ ID dans le FIFO\n");
+				exit(1);
+			}
+			noctets = write(descripteur_fifo_serveur_ecriture,get_moyenne(titre_chercher),taille_cote*sizeof(char));
+			if(noctets < taille_cote*sizeof(char)) {
+				printf("Probleme lors de l'ecriture du champ ID dans le FIFO\n");
+				exit(1);
+			}
 		}
 
 		//On envoi le nombre de vote
-		vote = get_vote(titre_chercher);
-		noctets = write(descripteur_fifo_serveur_ecriture, &vote , sizeof(int));
-		if(noctets < sizeof(int)) {
-			printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
-			exit(1);
+		if(get_vote(titre_chercher)==-1){
+			vote = 0;
+			noctets = write(descripteur_fifo_serveur_ecriture, &vote , sizeof(int));
+			if(noctets < sizeof(int)) {
+				printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
+				exit(1);
+			}
+		}
+		else{
+			vote = get_vote(titre_chercher);
+			noctets = write(descripteur_fifo_serveur_ecriture, &vote , sizeof(int));
+			if(noctets < sizeof(int)) {
+				printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
+				exit(1);
+			}
 		}
 	//comm-HLR08 finie
 		//Lab3 comm-HLR11
 		/*Le serveur est capable de recevoir la note sur 10 du client
 		 *et de calculer la nouvelle cote de classement du titre évalué.*/
-		noctets = read(descripteur_fifo_client_lecture, &vote , sizeof(int));
-		if(noctets < sizeof(int)) {
+		noctets = read(descripteur_fifo_client_lecture, &cote , sizeof(float));
+		if(noctets < sizeof(float)) {
 			printf("Probleme lors de l'ecriture de l'annee de parution dans le FIFO\n");
 			exit(1);
 		}
-		fichier_cote(titre_chercher, vote);
+		fichier_cote(titre_chercher, cote);
 		//comm-HLR11 finie
 
 		//Lab3 comm-HLR12
@@ -384,27 +409,6 @@ int main(int argc, char *argv[]) {
 	}
 	//Tube-HLR04 finie
 	//comm-HLR03 finie
-
-
-/*
-	int note;
-	t_titre titre_chercher = cree_titre();
-
-	int num_titre;
-	printf("Veuillez entre un numero de titre:\n");
-	//scanf("%i", &num_titre);
-	num_titre = 0;
-	titre_chercher = print_titre(resultat,num_titre);
-	//titre_chercher = get_titre_ID(resultat,"tt0000039");
-	printf("\tNumero de titre ; %i\n", num_titre);
-	printf("Veuillez entre une cote:\n");
-	//scanf("%i", &note);
-	note = 10;
-	printf("\tNote a rajouter ; %i\n", note);
-
-	fichier_cote(titre_chercher, note);
-
-*/
 
 	//Lab2-HLR26
 	/*

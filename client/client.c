@@ -389,16 +389,24 @@ int main(int argc, char *argv[]) {
 	int taille_cote_eval;
 	char* cote_eval;
 	int nb_vote_eval;
-	int note;
+	float note;
 	int taille_nouvelle_cote;
 	char* nouvelle_cote;
 	int nouveau_nb_vote;
+
+
 	//Lab3 comm-HLR05
 	/*Si l'argument -v a été donné par l'utilisateur, le client doit demander à l'utilisateur
 	 *quel titre désire-t-il évaluer dans la liste des résultats reçus du serveur.*/
 	if(flag==1){
-		printf("[-] Veuillez choisir un titre a evaluer");
+		printf("[-] Veuillez choisir un titre a evaluer\n  >  ");
 		scanf("%i",&num_titre);
+
+		//On verifie que le numero de titre specifier par l'usager est valide
+		while( num_titre<1 || num_titre>nb_titre ){
+			printf("[!] Veuillez choisir une valeur de titre valide\n  >  ");
+			scanf("%i",&num_titre);
+		}
 		//comm-HLR05 finie
 
 		//Lab3 comm-HLR06
@@ -423,7 +431,7 @@ int main(int argc, char *argv[]) {
 			printf("Erreur lors de la lecture du champ ID du FIFO\n");
 			exit(1);
 		}
-		printf("%s\n",ID_eval);
+		printf("\t- Titre: %s\n",ID_eval);
 
 		noctets=read(descripteur_fifo_serveur_lecture,&taille_cote_eval,sizeof(int));
 		if(noctets == sizeof(int)) {
@@ -438,32 +446,40 @@ int main(int argc, char *argv[]) {
 			printf("Erreur lors de la lecture du champ cote du FIFO\n");
 			exit(1);
 		}
-		printf("%s /10 \n",cote_eval);
+		printf("\t- Cote moyenne: %s /10 \n",cote_eval);
 
 		noctets = read(descripteur_fifo_serveur_lecture, &nb_vote_eval, sizeof(int));
 		if(noctets != sizeof(int)) {
 			printf("Erreur lors de la lecture du nombre de vote du FIFO\n");
 			exit(1);
 		}
-		printf("%i\t \n",nb_vote_eval);
+		printf("\t- Nombre de votes : %i\n\n",nb_vote_eval);
 		//comm-HLR09 finie
 
 		//Lab 3 comm-HLR10
 		/* On demande la note et on l'envoie au serveur */
-		printf("Quelle note sur 10 donnez-vous ?");
-		scanf("%i",note);
-		noctets=write(descripteur_fifo_client_ecriture, &note, sizeof(int));
-		if(noctets < sizeof(int)) {
+		printf("[-] Quelle note sur 10 donnez-vous ?\n  >  ");
+		scanf("%f",&note);
+
+		//Verifie que la note se situe entre 0 et 10
+		while(note<0 || note>10){
+			printf("[!]Vous devez choisir une note sur 10 \n  >  ");
+			scanf("%f",&note);
+		}
+		//On envoi la note au serveur
+		noctets=write(descripteur_fifo_client_ecriture, &note, sizeof(float));
+		if(noctets < sizeof(float)) {
 			printf("Probleme lors de l'ecriture de la note dans le FIFO\n");
 			exit(1);
 		}
 	    //comm-HLR10 finie
+
 	    //Lab 3 comm-HLR13
 		/* On recoit et affiche les nouvelles informations*/
-		printf("%s\n",ID_eval);
+		printf("\t- Titre: %s\n",ID_eval);
 		noctets=read(descripteur_fifo_serveur_lecture,&taille_nouvelle_cote,sizeof(int));
 		if(noctets == sizeof(int)) {
-			cote_eval = malloc(taille_nouvelle_cote*sizeof(char));
+			nouvelle_cote = malloc(taille_nouvelle_cote*sizeof(char));
 		}
 		else {
 			printf("Erreur lors de la lecture de la taille du champ cote du FIFO\n");
@@ -474,22 +490,25 @@ int main(int argc, char *argv[]) {
 			printf("Erreur lors de la lecture du champ cote du FIFO\n");
 			exit(1);
 		}
-		printf("%s /10 \n",nouvelle_cote);
+		printf("\t- Nouvelle cote moyenne: %s /10 \n",nouvelle_cote);
 
 		noctets = read(descripteur_fifo_serveur_lecture, &nouveau_nb_vote, sizeof(int));
 		if(noctets != sizeof(int)) {
 			printf("Erreur lors de la lecture du nombre de vote du FIFO\n");
 			exit(1);
 		}
-		printf("%i\t \n",nouveau_nb_vote);
+		printf("\t- Nouveau nombre de votes: %i \n",nouveau_nb_vote);
 		//comm-HLR13 finie
-
 	}
 	//comm-HLR06 finie
-
+	free(ID_eval);
+	free(cote_eval);
+	free(nouvelle_cote);
+	//free(null);
 	close(descripteur_fifo_client_ecriture);
 	close(descripteur_fifo_serveur_lecture);
-    return 0;
+
+	return 0;
 }
 //HLR26 finie
 

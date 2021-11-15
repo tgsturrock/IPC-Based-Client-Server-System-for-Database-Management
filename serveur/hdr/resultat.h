@@ -44,7 +44,7 @@ t_resultat cree_resultat(void);
 
 t_titre print_titre(t_resultat resultat, int i);
 
-void calcul_moyenne(t_titre titre, int nouvelle_cote);
+void calcul_moyenne(t_titre titre, float nouvelle_cote);
 
 void set_numero_ligne(t_titre titre, int numero_ligne);
 

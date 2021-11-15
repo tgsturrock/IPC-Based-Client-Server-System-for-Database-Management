@@ -156,11 +156,12 @@ void add_titre(t_resultat resultat, t_titre titre) {
 t_titre print_titre(t_resultat resultat, int i) {
 	for (int j = 0; j < resultat->nb_titre; j++) {
 		if (j == i) {
-			printf("\t[%d] - %s\t%s\t%d\t%s\t%s\t\n",
-							i, resultat->titre[i]->ID,
-							resultat->titre[i]->titre,
-							resultat->titre[i]->annee_parution_min,
-							resultat->titre[i]->categorie, resultat->titre[i]->genre);
+			printf("\t[%d] %s\t%s\t%s\t%i\t%s\n",
+					(i+1), resultat->titre[i]->ID,
+					resultat->titre[i]->categorie,
+					resultat->titre[i]->titre,
+					resultat->titre[i]->annee_parution_min,
+					resultat->titre[i]->genre);
 			return resultat->titre[i];
 		}
 	}
@@ -174,11 +175,11 @@ void fichier_resultat(t_resultat resultat) {
 	 */
 	printf("\t[+] %i resultat de titre trouvés\n", resultat->nb_titre);
 	for (int i = 0; i < (resultat->nb_titre); i++) {
-		printf("\t[%d] %s\t%s\t%d\t%s\t%s\t\n",
+		printf("\t[%d] %s\t%s\t%s\t%i\t%s\t\n",
 				(i+1), resultat->titre[i]->ID,
+				resultat->titre[i]->categorie,
 				resultat->titre[i]->titre,
 				resultat->titre[i]->annee_parution_min,
-				resultat->titre[i]->categorie,
 				resultat->titre[i]->genre);
 	}
 
@@ -217,7 +218,7 @@ void set_ligne(t_titre titre){
 
 }
 
-void calcul_moyenne(t_titre titre, int nouvelle_cote) {
+void calcul_moyenne(t_titre titre, float nouvelle_cote) {
 
 	//On s'assure que la nouvelle cote se trouve entre 0 et 10
 	if (nouvelle_cote >= 0 && nouvelle_cote <= 10) {
@@ -230,7 +231,7 @@ void calcul_moyenne(t_titre titre, int nouvelle_cote) {
 		if (titre->note_moyenne == NULL) {
 			titre->nombre_votes = 1;
 			titre->note_moyenne = malloc(sizeof(int));
-			sprintf(titre->note_moyenne,"%i",nouvelle_cote); //On stock la nouvelle moyenne
+			sprintf(titre->note_moyenne,"%.1f",nouvelle_cote); //On stock la nouvelle moyenne
 		}
 		//serveur-HLR06 finie
 

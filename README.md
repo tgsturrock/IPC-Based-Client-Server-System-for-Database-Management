@@ -1,8 +1,6 @@
-Sure, here is an updated README for your project. I've integrated all the details you've provided about the file structure and build scripts to create a complete and professional summary of your work.
+### Movie Database Application
 
-### 🎬 ELE216 - Movie Database Application
-
-This repository contains the source code for a C-based movie database application, developed for the ELE216 course. The project is built on a **client-server architecture**, showcasing core concepts of **inter-process communication (IPC)** and **modular software design**. The application allows users to search for movies and update their ratings, with all database operations handled by a dedicated server program.
+This repository contains the source code for a C-based movie database application. The project is built on a **client-server architecture**, showcasing core concepts of **inter-process communication (IPC)** and **modular software design**. The application allows users to search for movies and update their ratings, with all database operations handled by a dedicated server program.
 
 ---
 

@@ -14,7 +14,7 @@ This project demonstrates a solid foundation in software engineering, with a str
 
 ### **Repository Structure**
 
-The project is well-organized, with a clear separation of concerns in the directory and file structure.
+The project is organized with a clear separation of concerns in the directory and file structure.
 
 * **`client/`**: This directory contains the source code for the client-side application.
     * **`client.c`**: The core source file for the client program. It handles all user interaction, serializes requests, and displays the server's responses.
